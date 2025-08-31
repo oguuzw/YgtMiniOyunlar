@@ -232,3 +232,12 @@ main {
     color: inherit;
     display: inline-block;
 }
+
+/* Mobilde kutuların arka planı daha saydam ve beyazlaşmasın diye düzeltme */
+@media (max-width: 600px) {
+    .game-card, .games-frame {
+        background: rgba(40,40,60,0.88) !important;
+        /* Gerekirse aşağıdaki satırı da ekleyin */
+        /* backdrop-filter: none !important; */
+    }
+}
