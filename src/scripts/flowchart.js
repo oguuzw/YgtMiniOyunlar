@@ -171,5 +171,5 @@ window.onload = function() {
 };
 
 document.getElementById('home-btn').onclick = function() {
-    window.location.href = '/index.html'; // Gerekirse yolu değiştirin
+    window.location.href = 'index.html'; // Gerekirse yolu değiştirin
 };
