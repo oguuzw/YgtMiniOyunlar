@@ -1,0 +1,274 @@
+body {
+    background: linear-gradient(120deg, #ffb347 0%, #ffcc80 100%);
+    font-family: 'Segoe UI', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.flowchart-bg-shapes {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    z-index: -1;
+    pointer-events: none;
+}
+
+.bg-shape {
+    position: absolute;
+    opacity: 0.18;
+    filter: blur(1px);
+    transition: opacity 0.3s;
+    will-change: transform;
+}
+
+.bg-oval {
+    width: 120px; height: 60px;
+    border-radius: 60px / 30px;
+    background: #ff7043;
+}
+
+.bg-rect {
+    width: 80px; height: 50px;
+    border-radius: 12px;
+    background: #ffa726;
+}
+
+.bg-parallelogram {
+    width: 90px; height: 50px;
+    background: #ff9800;
+    transform: skew(-20deg);
+    border-radius: 10px;
+}
+
+.bg-diamond {
+    width: 60px; height: 60px;
+    background: #ffb300;
+    transform: rotate(45deg);
+    border-radius: 8px;
+}
+
+.flowchart-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;  /* değiştirildi */
+    width: 80vw;           /* Daha dar bir alan */
+    max-width: 900px;      /* Maksimum genişlik */
+    margin: 40px auto 0 auto;
+    gap: 24px;             /* Sütunlar arası boşluk */
+}
+
+.column {
+    background: rgba(255,255,255,0.08);
+    border-radius: 14px;
+    padding: 24px 18px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+    min-width: 280px;
+    max-width: 320px;
+    display: flex;          /* eklendi */
+    flex-direction: column; /* eklendi */
+}
+
+h2 {
+    color: #fff;
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+#image-boxes, #name-boxes {
+    display: grid;
+    grid-template-rows: repeat(7, 1fr);
+    gap: 12px;
+    flex: 1;               /* eklendi */
+}
+
+.box {
+    background: rgba(255,255,255,0.18);
+    border-radius: 8px;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;    /* değiştirildi - flex-start yerine center */
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+    border: 2px solid transparent;
+    height: 100%;
+    min-width: 100px;
+    font-size: 0.95rem;
+    box-sizing: border-box;
+    text-align: center;        /* eklendi */
+    transition: transform 0.18s cubic-bezier(.4,1.4,.6,1);
+}
+
+.box:hover {
+    transform: scale(1.13);
+    z-index: 2;
+}
+
+/* İsim kutularındaki metni ortalamak için özel stil */
+#name-boxes .box {
+    text-align: center;        /* eklendi */
+    justify-content: center;   /* tekrar belirtildi */
+    padding: 8px;             /* her yönden eşit padding */
+    width: 100%;              /* eklendi - kutunun tüm genişliği kaplaması için */
+}
+
+/* Eğer isimler uzun olursa taşmayı önlemek için */
+#name-boxes .box span {
+    width: 100%;              /* eklendi */
+    word-wrap: break-word;    /* eklendi - uzun kelimelerin alt satıra geçmesi için */
+}
+
+.box.selected {
+    border: 2px solid #005aff;
+    background: rgba(0,90,255,0.12);
+}
+
+.box.correct {
+    background: #2ecc40 !important;
+    border-color: #2ecc40 !important;
+    color: #fff;
+}
+
+.box.wrong {
+    background: #ff003c !important;
+    border-color: #ff003c !important;
+    animation: shake 0.3s;
+    color: #fff;
+}
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    50% { transform: translateX(6px); }
+    75% { transform: translateX(-6px); }
+    100% { transform: translateX(0); }
+}
+
+.box img {
+    width: 28px;
+    height: 28px;
+    margin-right: 8px;
+    border-radius: 6px;
+    padding: 2px;
+}
+
+.score-panel {
+    display: flex;
+    justify-content: center;
+    position: fixed;           /* değiştirildi - sabit pozisyon */
+    top: 20px;                /* eklendi - üstten mesafe */
+    left: 50%;                /* eklendi - yatayda ortalama */
+    transform: translateX(-50%); /* eklendi - tam ortalama */
+    z-index: 1000;            /* artırıldı */
+    width: auto;              /* eklendi */
+}
+
+#score {
+    background: rgba(255,255,255,0.25);  /* arttırıldı - daha belirgin arka plan */
+    backdrop-filter: blur(6px);
+    color: #ff7043;
+    font-size: 2rem;
+    font-weight: 700;
+    padding: 30px;
+    width: 100px;
+    height: 100px;
+    border-radius: 40px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2); /* artırıldı - daha belirgin gölge */
+    border: 3px solid #ff9800;    /* kalınlaştırıldı */
+    letter-spacing: 2px;
+    text-align: center;
+    transition: background 0.3s, color 0.3s;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#score::before {
+    content: '';
+    position: absolute;
+    left: -30px;
+    top: -30px;
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #ff9800 0%, #ff7043 100%);
+    opacity: 0.25;            /* arttırıldı */
+    border-radius: 50%;
+    z-index: 0;
+}
+
+#score span {
+    position: relative;
+    z-index: 1;
+}
+
+#game-end {
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(30,30,60,0.95);
+    padding: 48px 32px;
+    border-radius: 24px;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.25);
+    text-align: center;
+    color: #fff;
+    z-index: 100;
+}
+
+#game-end.hidden {
+    display: none;
+}
+
+#game-end button {
+    margin: 16px 12px 0 12px;
+    padding: 10px 24px;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    border: none;
+    background: #005aff;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+#game-end button:hover {
+    background: #003a99;
+}
+
+.image-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 60px;
+    min-width: 120px;
+    background: rgba(255,255,255,0.18);
+    border-radius: 12px;
+    padding: 12px;
+    box-shadow: 0 1px 8px rgba(0,0,0,0.08);
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+    border: 2px solid transparent;
+}
+
+#home-btn {
+    position: fixed;
+    top: 40px;
+    left: 16px;
+    width: 64px;
+    height: 64px;
+    cursor: pointer;
+    z-index: 2000;
+    transition: transform 0.15s, box-shadow 0.15s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    border-radius: 50%;
+    background: white;
+    padding: 6px;
+}
+
+#home-btn:hover {
+    transform: scale(1.08) rotate(-6deg);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+    background: #f5f5f5;
+}

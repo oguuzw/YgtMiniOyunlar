@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Flow Chart Eşleştirme Oyunu</title>
+    <link rel="stylesheet" href="styles/flowchart.css">
+</head>
+<body>
+    <img id="home-btn" src="assets/back-button.png" alt="Ana Sayfa">
+    <div class="flowchart-bg-shapes"></div>
+    <div class="flowchart-container">
+        <div class="column images">
+            <h2>Semboller</h2>
+            <div id="image-boxes"></div>
+        </div>
+        <div class="column names">
+            <h2>İsimler</h2>
+            <div id="name-boxes"></div>
+        </div>
+    </div>
+    <div class="score-panel">
+        <span id="score">Puan: 0</span>
+    </div>
+    <div id="game-end" class="hidden">
+        <h2>Tebrikler! Oyun Bitti</h2>
+        <p id="final-score"></p>
+        <button onclick="restartGame()">Tekrar Oyna</button>
+        <button onclick="window.location.href='index.html'">Ana Sayfaya Dön</button>
+    </div>
+    <script src="scripts/flowchart.js"></script>
+</body>
+</html>
