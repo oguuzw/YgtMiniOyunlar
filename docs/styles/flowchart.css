@@ -65,13 +65,13 @@ html, body {
         padding: 16px 6px;
     }
     .box {
-        font-size: 1.25rem;
-        min-width: 80px;
-        min-height: 56px;
-        padding: 18px 8px;
+        font-size: 1.7rem !important;
+        min-width: 120px !important;
+        min-height: 70px !important;
+        padding: 18px 8px !important;
     }
     #image-boxes, #name-boxes {
-        gap: 10px;
+        gap: 16px !important;
     }
     #home-btn {
         top: 12px;
