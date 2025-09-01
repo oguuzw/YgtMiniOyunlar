@@ -241,26 +241,37 @@ header {
   transform: translateY(-2px) scale(1.04);
 }
 
+.game-info-message {
+  color: #fff;
+  background: rgba(44, 119, 68, 0.78);
+  border-radius: 14px;
+  padding: 10px 20px;
+  margin: 0 auto 18px auto;
+  font-size: 1.08rem;
+  text-align: center;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  max-width: 370px;
+  width: 90%;
+  display: block;
+}
+
 @media (max-width: 600px) {
   main {
-    min-height: 80vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    min-height: unset;
+    display: block;
+    justify-content: unset;
+    align-items: unset;
   }
   .game-oval {
     margin-top: 0;
     min-height: 240px;
-  }
-  .game-oval {
     padding: 24px 8px 16px 8px;
     min-width: unset;
     border-radius: 24px / 36px;
-    margin-top: -32px;
     display: flex;
     flex-direction: column;
-    justify-content: center; /* Ortalar */
-    min-height: 320px;
+    justify-content: center;
   }
   .guess-info-box {
     display: flex;
@@ -298,6 +309,13 @@ header {
   .header-title-box h1 {
     font-size: 1.2em;
     white-space: normal;
+  }
+  .game-info-message {
+    font-size: 0.98rem;
+    padding: 8px 6px;
+    max-width: 98vw;
+    margin-top: 124px;   /* Daha az boşluk */
+    margin-bottom: 32px;
   }
 }
 
