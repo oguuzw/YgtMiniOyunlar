@@ -1,5 +1,5 @@
 // Modern hareketli yazılım-bilgisayar efektleri
-const symbols = ['{', '}', '<', '>', '0', '1', ';', '()', '[]', '</>', '&&', '|', '!', '=', 'function', 'if', 'while'];
+const symbols = ['{', '}', '0', '1', ';', '()', '[]', '&&', '||', '!', '=', 'void', 'if','else', 'while','int','float','double','char','bool','#include','<stdio.h>','<stdlib.h>','printf','scanf'];
 const codeEffects = document.getElementById('code-effects');
 
 function createSymbol() {
