@@ -1,32 +1,42 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" charset="UTF-8">
-    <title>Flow Chart Eşleştirme Oyunu</title>
-    <link rel="stylesheet" href="styles/flowchart.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flowchart Eşleştirme Oyunu</title>
+  <link rel="stylesheet" href="styles/flowchart.css">
 </head>
 <body>
-    <img id="home-btn" src="assets/back-button.png" alt="Ana Sayfa">
-    <div class="flowchart-bg-shapes"></div>
-    <div class="flowchart-container">
-        <div class="column images">
-            <h2>Semboller</h2>
-            <div id="image-boxes"></div>
-        </div>
-        <div class="column names">
-            <h2>İsimler</h2>
-            <div id="name-boxes"></div>
-        </div>
+  <div class="background"></div>
+  <div class="container">
+    <header>
+      <div class="header-title-box">
+        <h1>Flowchart Eşleştirme Oyunu</h1>
+      </div>
+    </header>
+    <div class="score-back">
+      <button id="back-btn">
+        <img src="assets/back-button.png" alt="Geri">
+      </button>
+      <div id="score-box">Puan: <span id="score">0</span></div>
     </div>
-    <div class="score-panel">
-        <span id="score">Puan: 0</span>
-    </div>
-    <div id="game-end" class="hidden">
-        <h2>Tebrikler! Oyun Bitti</h2>
-        <p id="final-score"></p>
-        <button onclick="restartGame()">Tekrar Oyna</button>
-        <button onclick="window.location.href='index.html'">Ana Sayfaya Dön</button>
-    </div>
-    <script src="scripts/flowchart.js"></script>
+    <main>
+      <div class="match-area">
+        <section class="symbols">
+          <h2>Semboller</h2>
+          <div class="items" id="symbols">
+            <!-- Fotoğraflar buraya JS ile eklenecek -->
+          </div>
+        </section>
+        <section class="names">
+          <h2>İsimler</h2>
+          <div class="items" id="names">
+            <!-- Kelimeler buraya JS ile eklenecek -->
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+  <script src="scripts/flowchart.js"></script>
 </body>
 </html>

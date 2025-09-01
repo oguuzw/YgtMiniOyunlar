@@ -1,175 +1,216 @@
-const flowchartItems = [
-    { key: "basla", img: "assets/start.png", name: "Başla" },
-    { key: "islem", img: "assets/islem.png", name: "İşlem" },
-    { key: "in", img: "assets/in.png", name: "Giriş" },
-    { key: "out", img: "assets/out.png", name: "Çıktı" },
-    { key: "j", img: "assets/j.png", name: "Karar" },
-    { key: "baglanti", img: "assets/baglanti.png", name: "Bağlantı" },
-    { key: "end", img: "assets/end.png", name: "Bitiş" }
+// Semboller ve isimler eşleştirme verisi
+const pairs = [
+  { img: 'assets/start.png', word: 'Başla' },
+  { img: 'assets/islem.png', word: 'İşlem' },
+  { img: 'assets/in.png', word: 'Giriş' },
+  { img: 'assets/out.png', word: 'Çıktı' },
+  { img: 'assets/j.png', word: 'Karar' },
+  { img: 'assets/baglanti.png', word: 'Bağlantı' },
+  { img: 'assets/end.png', word: 'Bitiş' }
 ];
 
+// DOM referansları
+const symbolsDiv = document.getElementById('symbols');
+const namesDiv = document.getElementById('names');
+const scoreSpan = document.getElementById('score');
+const backBtn = document.getElementById('back-btn');
+
+// Oyun durumu
 let score = 0;
-let selectedImage = null;
+let selectedSymbol = null;
 let selectedName = null;
-let matched = {};
-let totalMatches = flowchartItems.length;
+let matched = {}; // {symbolIndex: true, ...}
 
-function shuffle(array) {
-    return array.sort(() => Math.random() - 0.5);
+// Karıştırma fonksiyonu
+function shuffle(arr) {
+  return arr.map(v => [Math.random(), v])
+    .sort((a, b) => a[0] - b[0])
+    .map(v => v[1]);
 }
 
-function renderBoxes() {
-    const imageBoxes = document.getElementById('image-boxes');
-    const nameBoxes = document.getElementById('name-boxes');
-    imageBoxes.innerHTML = '';
-    nameBoxes.innerHTML = '';
+// Kutuları oluştur
+function renderItems() {
+  symbolsDiv.innerHTML = '';
+  namesDiv.innerHTML = '';
+  const symbolOrder = shuffle([...Array(pairs.length).keys()]);
+  const nameOrder = shuffle([...Array(pairs.length).keys()]);
 
-    flowchartItems.forEach(item => {
-        const imgBox = document.createElement('div');
-        imgBox.className = 'box image-box';
-        imgBox.dataset.key = item.key;
-        imgBox.innerHTML = `<img src="${item.img}" alt="${item.name}">`;
-        imgBox.onclick = () => selectImageBox(imgBox);
-        imageBoxes.appendChild(imgBox);
-    });
+  symbolOrder.forEach(i => {
+    const box = document.createElement('div');
+    box.className = 'item-box symbol-box';
+    box.dataset.index = i;
+    box.innerHTML = `<img src="${pairs[i].img}" alt="Sembol">`;
+    box.addEventListener('click', () => selectSymbol(box, i));
+    symbolsDiv.appendChild(box);
+  });
 
-    shuffle([...flowchartItems]).forEach(item => {
-        const nameBox = document.createElement('div');
-        nameBox.className = 'box name-box';
-        nameBox.dataset.key = item.key;
-        nameBox.textContent = item.name;
-        nameBox.onclick = () => selectNameBox(nameBox);
-        nameBoxes.appendChild(nameBox);
-    });
+  nameOrder.forEach(i => {
+    const box = document.createElement('div');
+    box.className = 'item-box name-box';
+    box.dataset.index = i;
+    box.innerHTML = `<span class="word">${pairs[i].word}</span>`;
+    box.addEventListener('click', () => selectName(box, i));
+    namesDiv.appendChild(box);
+  });
 }
 
-function selectImageBox(box) {
-    if (matched[box.dataset.key]) return;
-    document.querySelectorAll('.image-box').forEach(b => b.classList.remove('selected'));
-    box.classList.add('selected');
-    selectedImage = box;
-    checkMatch();
+// Seçim fonksiyonları
+function selectSymbol(box, idx) {
+  if (matched[idx]) return;
+  clearSelections('symbol');
+  box.classList.add('selected');
+  selectedSymbol = { box, idx };
+  tryMatch();
+}
+function selectName(box, idx) {
+  if (matched[idx]) return;
+  clearSelections('name');
+  box.classList.add('selected');
+  selectedName = { box, idx };
+  tryMatch();
+}
+function clearSelections(type) {
+  document.querySelectorAll('.symbol-box.selected').forEach(b => b.classList.remove('selected'));
+  document.querySelectorAll('.name-box.selected').forEach(b => b.classList.remove('selected'));
+  if (type === 'symbol') selectedSymbol = null;
+  if (type === 'name') selectedName = null;
 }
 
-function selectNameBox(box) {
-    if (matched[box.dataset.key]) return;
-    document.querySelectorAll('.name-box').forEach(b => b.classList.remove('selected'));
-    box.classList.add('selected');
-    selectedName = box;
-    checkMatch();
-}
-
-function checkMatch() {
-    if (selectedImage && selectedName) {
-        if (selectedImage.dataset.key === selectedName.dataset.key) {
-            selectedImage.classList.add('correct');
-            selectedName.classList.add('correct');
-            matched[selectedImage.dataset.key] = true;
-            score += 20;
-            document.getElementById('score').textContent = `Puan: ${score}`;
-            selectedImage.classList.remove('selected');
-            selectedName.classList.remove('selected');
-            selectedImage = null;
-            selectedName = null;
-            if (Object.keys(matched).length === totalMatches) {
-                setTimeout(showEndScreen, 700);
-            }
-        } else {
-            score -= 10;
-            document.getElementById('score').textContent = `Puan: ${score}`;
-            selectedImage.classList.add('wrong');
-            selectedName.classList.add('wrong');
-            setTimeout(() => {
-                selectedImage.classList.remove('wrong', 'selected');
-                selectedName.classList.remove('wrong', 'selected');
-                selectedImage = null;
-                selectedName = null;
-            }, 600);
+// Eşleştirme kontrolü
+function tryMatch() {
+  if (selectedSymbol && selectedName) {
+    if (selectedSymbol.idx === selectedName.idx) {
+      // Doğru eşleşme
+      selectedSymbol.box.classList.add('correct');
+      selectedName.box.classList.add('correct');
+      matched[selectedSymbol.idx] = true;
+      score += 20;
+      updateScore();
+      setTimeout(() => {
+        selectedSymbol.box.classList.remove('selected');
+        selectedName.box.classList.remove('selected');
+        selectedSymbol = null;
+        selectedName = null;
+        if (Object.keys(matched).length === pairs.length) {
+          setTimeout(showModal, 400); // Modalı göster
         }
+      }, 600);
+    } else {
+      // Yanlış eşleşme
+      selectedSymbol.box.classList.add('wrong');
+      selectedName.box.classList.add('wrong');
+      score -= 10;
+      updateScore();
+      setTimeout(() => {
+        selectedSymbol.box.classList.remove('wrong', 'selected');
+        selectedName.box.classList.remove('wrong', 'selected');
+        selectedSymbol = null;
+        selectedName = null;
+      }, 600);
     }
+  }
 }
 
-function showEndScreen() {
-    document.getElementById('game-end').classList.remove('hidden');
-    document.getElementById('final-score').textContent = `Toplam Puan: ${score}`;
+// Skor güncelle
+function updateScore() {
+  scoreSpan.textContent = score;
 }
 
-function restartGame() {
+// Geri butonu
+backBtn.addEventListener('click', () => {
+  window.location.href = "index.html";
+});
+
+// Modal ekranı ekle
+function createModal() {
+  let modal = document.getElementById('finish-modal');
+  if (modal) return; // Zaten varsa tekrar ekleme
+
+  modal = document.createElement('div');
+  modal.id = 'finish-modal';
+  modal.innerHTML = `
+    <div class="modal-content">
+      <h2>Tebrikler!</h2>
+      <p>Puanınız: <span id="final-score"></span></p>
+      <div class="modal-buttons">
+        <button id="home-btn">Ana Sayfa</button>
+        <button id="retry-btn">Tekrar Oyna</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+
+  // Butonlara event ekle
+  document.getElementById('home-btn').onclick = () => {
+    window.location.href = "index.html";
+  };
+  document.getElementById('retry-btn').onclick = () => {
+    modal.style.display = 'none';
     score = 0;
     matched = {};
-    selectedImage = null;
-    selectedName = null;
-    document.getElementById('score').textContent = `Puan: 0`;
-    document.getElementById('game-end').classList.add('hidden');
-    renderBoxes();
+    updateScore();
+    renderItems();
+  };
 }
 
-// Geometrik şekillerin arka planda hareket etmesi
-const shapes = [
-    { class: 'bg-oval' },
-    { class: 'bg-rect' },
-    { class: 'bg-parallelogram' },
-    { class: 'bg-diamond' },
-    { class: 'bg-oval' },
-    { class: 'bg-rect' },
-    { class: 'bg-parallelogram' }
-];
-
-function createBgShapes() {
-    const container = document.querySelector('.flowchart-bg-shapes');
-    container.innerHTML = '';
-    shapes.forEach((shape, i) => {
-        const el = document.createElement('div');
-        el.className = `bg-shape ${shape.class}`;
-        el.style.top = (10 + i * 12 + Math.random() * 10) + 'vh';
-        el.style.left = (10 + i * 13 + Math.random() * 10) + 'vw';
-        // Daha yavaş hareket için dx ve dy değerlerini küçült
-        el.dataset.dx = (Math.random() * 0.12 + 0.04).toFixed(3); // 0.04 - 0.16
-        el.dataset.dy = (Math.random() * 0.12 + 0.04).toFixed(3);
-        el.dataset.dir = Math.random() > 0.5 ? 1 : -1;
-        // Rastgele faz ekle
-        el.dataset.phase = (Math.random() * Math.PI * 2).toFixed(3);
-        container.appendChild(el);
-    });
+// Modalı göster
+function showModal() {
+  createModal();
+  document.getElementById('final-score').textContent = score;
+  document.getElementById('finish-modal').style.display = 'flex';
 }
 
-function animateBgShapes() {
-    document.querySelectorAll('.bg-shape').forEach((el, i) => {
-        let top = parseFloat(el.style.top);
-        let left = parseFloat(el.style.left);
-        let dx = parseFloat(el.dataset.dx);
-        let dy = parseFloat(el.dataset.dy);
-        let dir = parseInt(el.dataset.dir);
-        let phase = parseFloat(el.dataset.phase);
+// Başlat
+renderItems();
+createModal(); // Modalı başta oluştur, gizli kalsın
 
-        // Daha yavaş ve rastgele hareket için katsayıları büyüt
-        const t = Date.now() / 40000 + phase; // 40000 ile yavaşlat
-        top += Math.sin(t + i) * dy * dir;
-        left += Math.cos(t + i * 1.3) * dx * dir;
-
-        // Sınırları koru
-        top = Math.max(0, Math.min(90, top));
-        left = Math.max(0, Math.min(90, left));
-
-        el.style.top = top + 'vh';
-        el.style.left = left + 'vw';
-
-        // Hareketi zamanla biraz değiştir (daha doğal rastgelelik)
-        if (Math.random() < 0.01) {
-            el.dataset.dx = (Math.random() * 0.12 + 0.04).toFixed(3);
-            el.dataset.dy = (Math.random() * 0.12 + 0.04).toFixed(3);
-            el.dataset.dir = Math.random() > 0.5 ? 1 : -1;
-        }
-    });
-    requestAnimationFrame(animateBgShapes);
+// Modal CSS'i ekle
+const modalStyle = document.createElement('style');
+modalStyle.textContent = `
+#finish-modal {
+  display: none;
+  position: fixed;
+  z-index: 9999;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  align-items: center;
+  justify-content: center;
 }
-
-window.onload = function() {
-    renderBoxes();
-    createBgShapes();
-    animateBgShapes();
-};
-
-document.getElementById('home-btn').onclick = function() {
-    window.location.href = 'index.html'; // Gerekirse yolu değiştirin
-};
+#finish-modal .modal-content {
+  background: #fffbe9;
+  border-radius: 18px;
+  padding: 32px 24px 24px 24px;
+  box-shadow: 0 4px 32px #ff7e5f44;
+  text-align: center;
+  min-width: 240px;
+  max-width: 90vw;
+}
+#finish-modal h2 {
+  color: #ff7e5f;
+  margin-bottom: 12px;
+}
+#finish-modal p {
+  font-size: 1.2em;
+  margin-bottom: 22px;
+}
+#finish-modal .modal-buttons {
+  display: flex;
+  gap: 18px;
+  justify-content: center;
+}
+#finish-modal button {
+  background: linear-gradient(90deg, #ffb347 0%, #ff7e5f 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 22px;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+#finish-modal button:hover {
+  background: linear-gradient(90deg, #ff7e5f 0%, #ffb347 100%);
+}
+`;
+document.head.appendChild(modalStyle);
