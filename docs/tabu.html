@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabu Oyunu</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="favicon/favicon.svg">
+    <link rel="icon" type="image/png" sizes="96x96" href="favicon/favicon-96x96.png">
+    <link rel="apple-touch-icon" href="favicon/apple-touch-icon.png">
+    <link rel="manifest" href="favicon/site.webmanifest">
+    <link rel="icon" type="image/x-icon" href="favicon/favicon.ico">
+    
+    <link rel="stylesheet" href="styles/tabu.css">
+</head>
+<body>
+    <div class="container">
+        <!-- header removed -->
+        <div class="score-back">
+            <button id="back-btn">
+                <img src="assets/back-button-tabu.png" alt="Geri">
+            </button>
+            <div class="team-scores">
+                <div class="team-score team-c-box">
+                    <img src="assets/c.png" alt="C Logo" class="score-team-logo">
+                    <div class="score-text">
+                        <span class="team-label">C Takımı</span>
+                        <span id="team-c-score" class="score-value">0</span>
+                    </div>
+                </div>
+                <div class="team-score team-java-box">
+                    <img src="assets/java.png" alt="Java Logo" class="score-team-logo">
+                    <div class="score-text">
+                        <span class="team-label">Java Takımı</span>
+                        <span id="team-java-score" class="score-value">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <main>
+            <div class="game-container">
+                <div class="game-header">
+                    <div class="game-info">
+                        <div class="current-team">
+                            <span id="current-team-display" class="team-c">
+                                <img src="assets/c.png" alt="C Logo" class="team-logo">
+                                C Takımı Oynuyor
+                            </span>
+                        </div>
+                        <div class="timer-container">
+                            <div class="timer">
+                                <span class="timer-icon">⏱️</span>
+                                <span id="time">60</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="game-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Doğru</span>
+                            <span id="correct-count" class="stat-value">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Pas</span>
+                            <span id="pass-count" class="stat-value">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Tabu</span>
+                            <span id="taboo-count" class="stat-value">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-content">
+                        <div class="main-word"></div>
+                        <div class="word-divider"></div>
+                        <div class="forbidden-words"></div>
+                    </div>
+                </div>
+
+                <div class="button-controls">
+                    <button id="pass-btn" class="game-btn pass">
+                        <span class="btn-icon">↷</span>
+                        <span class="btn-text">Pas</span>
+                    </button>
+                    <button id="correct-btn" class="game-btn correct">
+                        <span class="btn-icon">✓</span>
+                        <span class="btn-text">Doğru</span>
+                    </button>
+                    <button id="taboo-btn" class="game-btn taboo">
+                        <span class="btn-icon">⚠</span>
+                        <span class="btn-text">Tabu!</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Başlangıç Modal -->
+            <div id="start-modal" class="modal-overlay">
+                <div class="modal-content">
+                    <h2>Tabu Oyununa Hoş Geldiniz!</h2>
+                    <div class="instructions">
+                        <p>Nasıl Oynanır:</p>
+                        <ol>
+                            <li>İki takım sırayla oynar (C Takımı ve Java Takımı)</li>
+                            <li>Her kartda bir ana kelime ve 5 yasaklı kelime vardır</li>
+                            <li>Anlatıcı, yasaklı kelimeleri kullanmadan ana kelimeyi takım arkadaşlarına anlatmaya çalışır</li>
+                            <li>Doğru bilinen her kelime +1 puan</li>
+                            <li>Pas geçilen kelimeler için puan yok</li>
+                            <li>Yasaklı kelime kullanılırsa (Tabu) -1 puan</li>
+                        </ol>
+                    </div>
+                    <div class="game-settings">
+                        <div class="time-select">
+                            <p>Süre Seçin:</p>
+                            <div class="time-buttons">
+                                <button data-time="60" class="time-button active">60 Saniye</button>
+                                <button data-time="90" class="time-button">90 Saniye</button>
+                                <button data-time="120" class="time-button">120 Saniye</button>
+                            </div>
+                        </div>
+                    </div>
+                    <button id="start-game-btn" class="modal-button">Oyuna Başla</button>
+                </div>
+            </div>
+
+            <!-- Takım Değişim Modal -->
+            <div id="switch-team-modal" class="modal-overlay" style="display:none;">
+                <div class="modal-content">
+                    <div class="team-switch-header">
+                        <img src="assets/c.png" alt="C Logo" class="team-logo-large">
+                        <h2>C Takımının Süresi Bitti!</h2>
+                    </div>
+                    <div id="team-score"></div>
+                    <div id="team-stats"></div>
+                    <div class="next-team-info">
+                        <img src="assets/java.png" alt="Java Logo" class="team-logo-medium">
+                        Sıra Java Takımında!
+                    </div>
+                    <button id="next-team-btn" class="modal-button">Java Takımı Başlasın</button>
+                </div>
+            </div>
+
+            <!-- Bitiş Modal -->
+            <div id="end-modal" class="modal-overlay" style="display:none;">
+                <div class="modal-content">
+                    <h2>Oyun Bitti!</h2>
+                    <div id="final-score"></div>
+                    <div id="final-stats"></div>
+                    <div class="modal-buttons">
+                        <button id="play-again-btn" class="modal-button">Tekrar Oyna</button>
+                        <button id="go-home-btn" class="modal-button">Ana Sayfa</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="scripts/tabu.js"></script>
+</body>
+</html>

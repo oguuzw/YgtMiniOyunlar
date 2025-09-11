@@ -1,0 +1,334 @@
+/* Clean, compacted stylesheet for Tabu - modern background and smaller UI elements */
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  color: #f3f4f8;
+  background-attachment: fixed;
+  background-image:
+    radial-gradient(600px circle at 10% 20%, rgba(124,77,255,0.12), transparent 12%),
+    radial-gradient(400px circle at 90% 80%, rgba(0,200,83,0.07), transparent 14%),
+    linear-gradient(135deg, #0f172a 0%, #2a1b5d 50%, #120136 100%);
+  background-size: cover, cover, cover;
+  overflow-y: auto;
+  position: relative;
+}
+
+/* subtle animated overlay to give depth */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: conic-gradient(from 120deg at 30% 40%, rgba(124,77,255,0.06), rgba(74,20,140,0.04), transparent 70%);
+  mix-blend-mode: overlay;
+  opacity: 0.95;
+  transform-origin: 50% 50%;
+  animation: rotateBg 24s linear infinite;
+  z-index: 0;
+}
+
+@keyframes rotateBg {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 12px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* center horizontally */
+  justify-content: center; /* center vertically */
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 28px;
+  margin-bottom: 12px;
+}
+
+.header-title-box {
+  background: rgba(255,255,255,0.85);
+  border-radius: 14px;
+  padding: 12px 24px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+  z-index: 2;
+}
+
+.header-title-box h1 {
+  margin: 0;
+  font-size: 1.8em;
+  color: #222;
+  letter-spacing: 1px;
+  font-weight: 700;
+}
+
+.score-back {
+  position: relative;
+  width: 100%;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+#back-btn {
+  background: #fff;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 0 6px rgba(255,255,255,0.2);
+  transition: all 0.28s ease;
+}
+
+#back-btn:hover { transform: scale(1.06); box-shadow: 0 0 0 8px rgba(255,255,255,0.28); }
+#back-btn img { width: 36px; height: 36px; }
+
+.team-scores { display: flex; gap: 12px; justify-content: center; }
+
+.team-score {
+  background: rgba(255,255,255,0.9);
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 1em;
+  font-weight: 600;
+  color: #222;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 140px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  transition: transform 0.22s ease;
+  z-index: 2;
+}
+.team-score:hover { transform: translateY(-2px); }
+
+.team-c-box { border: 2px solid #3949AB; background: linear-gradient(145deg, rgba(92,107,192,0.08), rgba(57,73,171,0.06)); }
+.team-java-box { border: 2px solid #D32F2F; background: linear-gradient(145deg, rgba(244,67,54,0.07), rgba(211,47,47,0.06)); }
+
+.score-team-logo { width: 24px; height: 24px; object-fit: contain; }
+.score-text { display: flex; flex-direction: column; gap: 4px; }
+.team-label { font-size: 0.75em; color: #666; text-transform: uppercase; letter-spacing: 0.5px; }
+.score-value { font-size: 1.2em; font-weight: 700; color: #4a148c; }
+
+.game-settings { margin-top: 12px; text-align: center; }
+.time-select p { color: #4a148c; font-weight: 600; margin-bottom: 8px; }
+.time-buttons { display: flex; gap: 12px; justify-content: center; margin-top: 8px; }
+.time-button { padding: 8px 14px; border: none; border-radius: 8px; font-size: 1em; font-weight: 600; cursor: pointer; transition: all 0.22s; background: #9575cd; color: white; }
+.time-button.active { background: #4a148c; transform: scale(1.05); box-shadow: 0 4px 10px rgba(0,0,0,0.14); }
+.time-button:hover { opacity: 0.95; }
+
+.game-info { text-align: center; margin-bottom: 10px; }
+.current-team { font-size: 1.2em; font-weight: 700; margin-bottom: 10px; padding: 8px; border-radius: 8px; text-align: center; }
+.current-team span { padding: 8px 18px; border-radius: 12px; display: inline-flex; align-items: center; gap: 10px; font-size: 1.1em; font-weight: 700; letter-spacing: 1px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); text-transform: uppercase; }
+.team-logo { width: 28px; height: 28px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.06)); }
+.current-team span.team-c { background: linear-gradient(145deg, #5C6BC0, #3949AB); color: white; border: 1px solid rgba(255,255,255,0.18); }
+.current-team span.team-java { background: linear-gradient(145deg, #F44336, #D32F2F); color: white; border: 1px solid rgba(255,255,255,0.18); }
+
+.team-button { padding: 8px 18px; border: none; border-radius: 8px; font-size: 1em; font-weight: 600; cursor: pointer; transition: all 0.22s; }
+.team-button.team-a { background: #2196f3; color: white; }
+.team-button.team-b { background: #f44336; color: white; }
+.team-button.active { transform: scale(1.05); box-shadow: 0 4px 10px rgba(0,0,0,0.12); }
+.team-button:hover { opacity: 0.95; }
+
+.game-container {
+  background: rgba(255,255,255,0.92);
+  border-radius: 18px;
+  padding: 18px; /* reduced padding to help fit */
+  box-shadow: 0 18px 48px rgba(0,0,0,0.18);
+  max-width: 640px;
+  width: calc(100% - 32px);
+  margin: 0 auto;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.18);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 0 1 auto;
+  position: relative;
+  z-index: 2;
+  max-height: calc(100vh - 48px);
+  overflow: auto;
+}
+
+.timer { text-align: center; font-size: 1.6em; font-weight: 700; color: #4a148c; margin-bottom: 12px; }
+
+.card {
+  background: linear-gradient(145deg, #ffffff, #f5f5f5);
+  border-radius: 14px;
+  padding: 14px;
+  margin: 12px 0;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08), inset 0 -2px 6px rgba(0,0,0,0.05);
+  position: relative;
+  border: 1px solid rgba(255,255,255,0.8);
+}
+.card-content { position: relative; }
+
+.main-word { font-size: 1.8em; font-weight: 800; color: #4a148c; text-align: center; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 1px; text-shadow: 2px 2px 4px rgba(0,0,0,0.08); }
+.word-divider { height: 2px; background: linear-gradient(to right, transparent, rgba(74,20,140,0.2), transparent); margin: 12px 0; }
+.forbidden-words { display: flex; flex-direction: column; gap: 10px; }
+.forbidden-word { font-size: 1.1em; color: #d32f2f; text-align: center; padding: 8px; background: linear-gradient(145deg, #fff5f5, #ffebee); border-radius: 12px; border: 1px solid rgba(211,47,47,0.1); box-shadow: 0 2px 8px rgba(211,47,47,0.05); transition: all 0.22s ease; }
+.forbidden-word:hover { transform: translateY(-2px); box-shadow: 0 4px 10px rgba(211,47,47,0.08); }
+
+.button-controls { display: flex; justify-content: center; gap: 8px; margin-bottom: 10px; }
+.game-btn { padding: 8px 14px; font-size: 1em; font-weight: 600; border: none; border-radius: 10px; cursor: pointer; transition: all 0.22s ease; }
+#pass-btn { background: #ffd600; color: #222; }
+#correct-btn { background: #00c853; color: white; }
+#taboo-btn { background: #ff1744; color: white; }
+.game-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.12); }
+
+.game-header { margin-bottom: 12px; }
+.game-stats { display: flex; justify-content: center; gap: 14px; margin-top: 12px; padding: 10px; background: rgba(255,255,255,0.9); border-radius: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+.stat-item { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+.stat-label { font-size: 0.85em; color: #666; text-transform: uppercase; letter-spacing: 1px; }
+.stat-value { font-size: 1.2em; font-weight: 700; color: #4a148c; }
+
+.timer-container { margin-top: 10px; }
+.timer { display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 1.4em; font-weight: 700; color: #4a148c; background: rgba(255,255,255,0.9); padding: 6px 14px; border-radius: 12px; box-shadow: 0 3px 10px rgba(0,0,0,0.04); }
+.timer-icon { font-size: 0.95em; }
+
+.modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center; z-index: 1000; }
+.modal-content { background: rgba(255,255,255,0.98); padding: 20px; border-radius: 20px; max-width: 460px; width: 92%; z-index: 1001; }
+.modal-content h2 { color: #4a148c; text-align: center; margin-bottom: 18px; }
+.instructions { color: #222; margin-bottom: 18px; }
+.instructions p { font-weight: 600; color: #4a148c; margin-bottom: 10px; }
+.instructions ol { padding-left: 18px; }
+.instructions li { margin-bottom: 6px; }
+
+.modal-button { background: #4a148c; color: white; border: none; padding: 10px 20px; border-radius: 10px; font-size: 1em; font-weight: 600; cursor: pointer; transition: all 0.22s ease; display: block; margin: 0 auto; min-width: 140px; }
+.modal-button:hover { background: #6a1b9a; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(74, 20, 140, 0.14); }
+.modal-buttons { display: flex; justify-content: center; gap: 12px; }
+#final-score { font-size: 1.3em; font-weight: 700; text-align: center; margin-bottom: 12px; }
+#final-stats, #team-stats { text-align: center; margin-bottom: 18px; }
+.next-team-info { text-align: center; font-size: 1.2em; font-weight: 600; color: #D32F2F; margin: 12px 0; padding: 10px; background: rgba(244, 67, 54, 0.08); border-radius: 8px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+.team-logo-large { width: 44px; height: 44px; object-fit: contain; }
+.team-logo-medium { width: 34px; height: 34px; object-fit: contain; }
+.team-switch-header { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 12px; }
+#team-score { font-size: 1.1em; font-weight: 600; text-align: center; margin: 12px 0; color: #2196f3; padding: 10px; background: rgba(33, 150, 243, 0.08); border-radius: 8px; }
+
+@media (max-width: 600px) {
+  .container { padding: 8px; }
+  .game-container { padding: 12px; margin-top: 0; max-height: calc(100vh - 24px); }
+  .header-title-box { padding: 10px 16px; margin-bottom: 8px; }
+  .header-title-box h1 { font-size: 1.2em; }
+  .score-back { height: auto; margin-bottom: 8px; }
+  .team-scores { flex-direction: row; gap: 8px; }
+  .team-score { font-size: 0.95em; padding: 6px 8px; min-width: auto; flex: 1; }
+  .score-team-logo { width: 20px; height: 20px; }
+  .team-label { font-size: 0.7em; }
+  .score-value { font-size: 1.0em; }
+  .current-team span { font-size: 1.0em; padding: 6px 12px; }
+  .main-word { font-size: 1.4em; }
+  .forbidden-word { font-size: 1.0em; padding: 6px; }
+  .button-controls { flex-direction: column; gap: 8px; margin-top: 12px; }
+  .game-btn { width: 100%; padding: 12px; }
+  .timer { font-size: 1.4em; padding: 6px 12px; }
+  .game-stats { padding: 8px; gap: 12px; }
+  .stat-value { font-size: 1.0em; }
+
+  /* Make score-back and game-container align horizontally on mobile */
+  .score-back {
+    /* nudge slightly more to the left on mobile */
+    width: calc(100% - 80px);
+    margin: 0 0 8px 8px; /* top right bottom left */
+    padding-left: 0;
+    padding-right: 0;
+    box-sizing: border-box;
+  }
+
+  /* Left-align team scores inside the score-back so they start at same x as game-container */
+  .team-scores { justify-content: flex-start; }
+  .team-score { min-width: 0; }
+}
+
+/* Increase vertical spacing specifically in the welcome/start modal so
+   the time selectors and the "Oyuna Başla" button are visually separated */
+#start-modal .game-settings {
+  margin-top: 22px;
+  margin-bottom: 18px; /* provide extra gap before the start button */
+}
+
+#start-modal .time-buttons {
+  gap: 14px;
+}
+
+#start-modal #start-game-btn.modal-button {
+  margin: 18px auto 0 auto; /* push the button further down and keep centered */
+}
+
+/* Desktop layout: place score column and main side-by-side and stretch them to same height
+   so the team-score blocks start and end vertically aligned with .game-container */
+@media (min-width: 720px) {
+  .container {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch; /* children will have equal height */
+    gap: 20px;
+    padding: 24px;
+    justify-content: center;
+  }
+
+  /* Left column: back button + vertical team scores */
+  .score-back {
+    width: 220px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* push back button to top and team scores to center/bottom as needed */
+    align-items: stretch;
+    margin-bottom: 0; /* reset mobile spacing */
+  }
+
+  /* Make back button larger and prevent it from being squashed on desktop */
+  #back-btn {
+    margin-bottom: 8px;
+    width: 64px;
+    height: 64px;
+    min-width: 64px;
+    min-height: 64px;
+    padding: 6px;
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+    flex: 0 0 auto; /* don't shrink */
+    background: #fff;
+  }
+
+  #back-btn img { width: 40px; height: 40px; }
+
+  .team-scores {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch;
+    justify-content: center;
+    flex: 1 1 auto;
+  }
+
+  .team-score {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 10px 12px;
+  }
+
+  /* Make main take remaining space and center the .game-container inside it */
+  main { flex: 1 1 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .game-container { margin: 0; }
+}

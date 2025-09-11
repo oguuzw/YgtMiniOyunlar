@@ -19,9 +19,11 @@ const goHomeBtn = document.getElementById('go-home-btn');
 
 function makeGuess() {
   guess = Math.floor((min + max) / 2);
-  guessInfo.textContent = `Tahmin ${guessCount} = ${guess}`;
+  guessInfo.textContent = `Sayınız ${guess} mi?`;
   history.push(guess);
-  guessHistory.textContent = `Tahminler: ${history.join(', ')}`;
+  let historyText = history.map((g, index) => `Tahmin ${index + 1} = ${g}`).join('\n');
+  guessHistory.style.whiteSpace = 'pre-line'; // Satır sonlarını korur
+  guessHistory.textContent = historyText;
 }
 
 function endGame(msg, color = "#fff") {
@@ -34,7 +36,11 @@ function endGame(msg, color = "#fff") {
 }
 
 function showSuccessModal(guessCount, guess) {
-  modalMessage.textContent = `${guessCount}. tahminde ${guess} sayısı bulundu!`;
+  if (guess === "Hatalı aralık") {
+    modalMessage.textContent = "Hatalı bir aralık belirttiniz. Lütfen tekrar deneyin.";
+  } else {
+    modalMessage.textContent = `${guessCount}. tahminde ${guess} sayısı bulundu!`;
+  }
   successModal.style.display = 'flex';
 }
 
@@ -42,12 +48,14 @@ smallerBtn.onclick = () => {
   if (finished) return;
   if (guess <= min) {
     endGame("Aralık hatalı! Oyun bitti.", "#ff5252");
+    showSuccessModal(guessCount, "Hatalı aralık");
     return;
   }
   max = guess - 1;
   guessCount++;
   if (guessCount > maxGuesses) {
     endGame("Tahmin hakkın bitti! Kaybettin.", "#ff5252");
+    showSuccessModal(guessCount, "Tahmin hakkı bitti");
     return;
   }
   makeGuess();
@@ -57,12 +65,14 @@ biggerBtn.onclick = () => {
   if (finished) return;
   if (guess >= max) {
     endGame("Aralık hatalı! Oyun bitti.", "#ff5252");
+    showSuccessModal(guessCount, "Hatalı aralık");
     return;
   }
   min = guess + 1;
   guessCount++;
   if (guessCount > maxGuesses) {
     endGame("Tahmin hakkın bitti! Kaybettin.", "#ff5252");
+    showSuccessModal(guessCount, "Tahmin hakkı bitti");
     return;
   }
   makeGuess();
@@ -82,8 +92,18 @@ goHomeBtn.onclick = () => {
   window.location.href = "index.html";
 };
 
-window.onload = () => {
+// Welcome modal elements
+const welcomeModal = document.getElementById('welcome-modal');
+const startGameBtn = document.getElementById('start-game-btn');
+
+// Hide welcome modal and start game
+startGameBtn.onclick = () => {
+  welcomeModal.style.display = 'none';
   makeGuess();
+};
+
+window.onload = () => {
+  welcomeModal.style.display = 'flex';
   animateBinaryBackground();
 };
 
@@ -109,7 +129,7 @@ function animateBinaryBackground() {
     for (let i = 0; i < columns; i++) {
       const text = Math.random() > 0.5 ? "0" : "1";
       ctx.fillText(text, i * 32, binaryDrops[i]);
-      binaryDrops[i] += 1.2 + Math.random() * 1.2;
+      binaryDrops[i] += 0.6 + Math.random() * 0.3; 
       if (binaryDrops[i] > height) {
         binaryDrops[i] = 0;
       }
