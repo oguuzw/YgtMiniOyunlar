@@ -3,8 +3,8 @@ const nextBtn = document.getElementById('next-round');
 const statusEl = document.getElementById('status');
 const leftImg = document.getElementById('left-img');
 const rightImg = document.getElementById('right-img');
-const leftChoose = document.getElementById('left-choose');
-const rightChoose = document.getElementById('right-choose');
+const leftCard = document.getElementById('left-card');
+const rightCard = document.getElementById('right-card');
 const resultMsg = document.getElementById('result-message');
 const scoreAEl = document.getElementById('score-a');
 const scoreBEl = document.getElementById('score-b');
@@ -81,8 +81,8 @@ async function preloadNextPair() {
 async function loadRound(){
   document.getElementById('result-overlay').classList.remove('show');
   canChoose = false;
-  leftChoose.disabled = true;
-  rightChoose.disabled = true;
+  leftCard.style.pointerEvents = 'none';
+  rightCard.style.pointerEvents = 'none';
   nextBtn.disabled = true;
 
   try {
@@ -138,8 +138,8 @@ async function loadRound(){
       
       setStatus('Hangi görsel AI tarafından üretildi?');
       canChoose = true;
-      leftChoose.disabled = false;
-      rightChoose.disabled = false;
+      leftCard.style.pointerEvents = 'auto';
+      rightCard.style.pointerEvents = 'auto';
       nextBtn.disabled = false;
       
       // Arka planda sonraki görseli yükle
@@ -164,11 +164,11 @@ function updateScoreboard() {
   if (currentTeam === 'A') {
     teamACard.classList.add('active');
     teamBCard.classList.remove('active');
-    currentTurnEl.textContent = '🔵 A Takımı';
+    currentTurnEl.textContent = '⚡ A';
   } else {
     teamBCard.classList.add('active');
     teamACard.classList.remove('active');
-    currentTurnEl.textContent = '🔴 B Takımı';
+    currentTurnEl.textContent = '🔥 B';
   }
 }
 
@@ -189,7 +189,7 @@ function showGameOver(winner) {
   
   overlay.classList.add('show', 'success');
   icon.textContent = '🏆';
-  message.textContent = `${winner === 'A' ? '🔵 A' : '🔴 B'} Takımı Kazandı!`;
+  message.textContent = `${winner === 'A' ? '⚡ A' : '🔥 B'} Takımı Kazandı!`;
   detail.textContent = `Tebrikler! ${scoreA}-${scoreB}`;
   
   // Oyunu sıfırla
@@ -206,8 +206,8 @@ function showGameOver(winner) {
 function choose(side){
   if(!canChoose) return;
   canChoose = false;
-  leftChoose.disabled = true;
-  rightChoose.disabled = true;
+  leftCard.style.pointerEvents = 'none';
+  rightCard.style.pointerEvents = 'none';
 
   const selectedIsAI = (side === aiPosition);
   const overlay = document.getElementById('result-overlay');
@@ -228,7 +228,7 @@ function choose(side){
     overlay.classList.add('success');
     overlay.classList.remove('failure');
     icon.textContent = '🎉';
-    message.textContent = `${currentTeam === 'A' ? '🔵 A' : '🔴 B'} Takımı +1 Puan!`;
+    message.textContent = `${currentTeam === 'A' ? '⚡ A' : '🔥 B'} Takımı +1 Puan!`;
     detail.textContent = 'Doğru bildiniz! 🎯';
     message.style.background = 'linear-gradient(135deg, #00f2fe, #4facfe)';
     message.style.webkitBackgroundClip = 'text';
@@ -275,12 +275,28 @@ function choose(side){
 }
 
 nextBtn.addEventListener('click', (e)=>{ e.preventDefault(); loadRound(); });
-leftChoose.addEventListener('click', ()=> choose('left'));
-rightChoose.addEventListener('click', ()=> choose('right'));
+leftCard.addEventListener('click', ()=> choose('left'));
+rightCard.addEventListener('click', ()=> choose('right'));
+
+// Tutorial modal kontrolü
+const tutorialOverlay = document.getElementById('tutorial-overlay');
+const startGameBtn = document.getElementById('start-game-btn');
+
+startGameBtn.addEventListener('click', () => {
+  tutorialOverlay.classList.remove('show');
+  localStorage.setItem('ai-vs-real-tutorial-seen', 'true');
+});
 
 // Sayfa yüklenince otomatik başlat
 window.addEventListener('DOMContentLoaded', ()=> {
   updateScoreboard();
+  
+  // Tutorial gösterilmişse direkt başlat
+  const tutorialSeen = localStorage.getItem('ai-vs-real-tutorial-seen');
+  if (tutorialSeen) {
+    tutorialOverlay.classList.remove('show');
+  }
+  
   loadRound();
   // İlk yüklemede 2 tur önceden yükle
   setTimeout(() => preloadNextPair(), 1000);
