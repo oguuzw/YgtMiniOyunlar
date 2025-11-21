@@ -84,6 +84,12 @@ async function loadRound(){
   leftCard.style.pointerEvents = 'none';
   rightCard.style.pointerEvents = 'none';
   nextBtn.disabled = true;
+  
+  // Skeleton loaderları göster
+  const leftSkeleton = document.getElementById('left-skeleton');
+  const rightSkeleton = document.getElementById('right-skeleton');
+  leftSkeleton.classList.add('loading');
+  rightSkeleton.classList.add('loading');
 
   try {
     let data;
@@ -130,6 +136,10 @@ async function loadRound(){
       new Promise(r => { leftImg.onload = r; leftImg.onerror = r; }),
       new Promise(r => { rightImg.onload = r; rightImg.onerror = r; })
     ]).then(() => {
+      // Skeleton loaderları gizle
+      leftSkeleton.classList.remove('loading');
+      rightSkeleton.classList.remove('loading');
+      
       // Aynı anda göster
       leftImg.style.transition = 'opacity 0.3s ease-in';
       rightImg.style.transition = 'opacity 0.3s ease-in';
@@ -150,6 +160,9 @@ async function loadRound(){
     console.error('❌ Hata:', error);
     setStatus('❌ Hata: ' + error.message + ' (Backend sunucusu çalışıyor mu?)');
     nextBtn.disabled = false;
+    // Hata durumunda skeleton'ları gizle
+    leftSkeleton.classList.remove('loading');
+    rightSkeleton.classList.remove('loading');
   }
 }
 

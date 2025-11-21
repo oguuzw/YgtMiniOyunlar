@@ -3,11 +3,37 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="AI tarafından üretilen görseller ile gerçek fotoğrafları ayırt edebilir misin? İki takım halinde yarışın ve AI görsellerini doğru tahmin edin!">
+  <meta name="keywords" content="ai vs gerçek, yapay zeka oyunu, görsel tanıma, ai görselleri, pollinations ai">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://ygt-mini-games.vercel.app/ai-vs-real.html">
+  <meta property="og:title" content="AI vs Gerçek - Yapay Zeka Görsel Tahmin Oyunu">
+  <meta property="og:description" content="AI tarafından üretilen görseller ile gerçek fotoğrafları ayırt edebilir misin? Takım olarak yarışın!">
+  <meta property="og:image" content="https://ygt-mini-games.vercel.app/assets/aiVsGercek.png">
+  
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://ygt-mini-games.vercel.app/ai-vs-real.html">
+  <meta property="twitter:title" content="AI vs Gerçek - Yapay Zeka Görsel Tahmin Oyunu">
+  <meta property="twitter:description" content="AI tarafından üretilen görseller ile gerçek fotoğrafları ayırt edebilir misin? Takım olarak yarışın!">
+  <meta property="twitter:image" content="https://ygt-mini-games.vercel.app/assets/aiVsGercek.png">
+  
   <title>AI vs Gerçek - Mini Oyun</title>
   <link rel="icon" type="image/svg+xml" href="favicon/favicon.svg">
   <link rel="manifest" href="favicon/site.webmanifest">
   <link rel="stylesheet" href="styles/main.css">
   <link rel="stylesheet" href="styles/ai-vs-real.css">
+  
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+  </script>
 </head>
 <body>
   <div class="container ai-vs-real-container">
@@ -54,6 +80,9 @@
     <section class="images-section">
       <div class="image-card clickable" id="left-card">
         <div class="image-wrapper">
+          <div class="image-skeleton" id="left-skeleton">
+            <div class="skeleton-shimmer"></div>
+          </div>
           <img id="left-img" alt="Sol Görsel">
         </div>
       </div>
@@ -76,6 +105,9 @@
       
       <div class="image-card clickable" id="right-card">
         <div class="image-wrapper">
+          <div class="image-skeleton" id="right-skeleton">
+            <div class="skeleton-shimmer"></div>
+          </div>
           <img id="right-img" alt="Sağ Görsel">
         </div>
       </div>
