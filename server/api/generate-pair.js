@@ -26,32 +26,28 @@ const realImagePool = [
   'https://images.unsplash.com/photo-1490730141103-6cac27aaab94?w=800&h=800&fit=crop'
 ];
 
-const aiPrompts = [
-  'photorealistic portrait of a person smiling, professional lighting, high detail',
-  'close-up portrait of a young person with natural lighting, realistic photo',
-  'professional headshot of a person in business attire, studio lighting',
-  'breathtaking mountain landscape at sunset, photorealistic, high detail',
-  'serene beach with crystal clear water and palm trees, realistic photo',
-  'dense forest with sunlight filtering through trees, photorealistic nature',
-  'beautiful waterfall in tropical rainforest, professional nature photography',
-  'snowy mountain peak with dramatic clouds, landscape photography',
-  'majestic lion portrait in natural habitat, wildlife photography, sharp focus',
-  'colorful parrot sitting on a branch, professional wildlife photo',
-  'cute golden retriever puppy playing in grass, photorealistic pet photo',
-  'elephant family walking at sunset in savanna, wildlife photography',
-  'close-up of a butterfly on a flower, macro photography, photorealistic',
-  'modern city skyline at night with illuminated buildings, urban photography',
-  'historic european street with old architecture, realistic travel photo',
-  'futuristic glass building with reflection, architectural photography',
-  'cozy coffee shop interior with warm lighting, lifestyle photography',
-  'delicious gourmet burger with fresh ingredients, food photography, professional'
+// Sabit seed'li AI görseller (cache'den hızlı gelir, her zaman aynı görsel)
+const aiImagePool = [
+  'https://image.pollinations.ai/prompt/photorealistic%20portrait%20smiling%20professional%20lighting?width=800&height=800&seed=12345&nologo=true',
+  'https://image.pollinations.ai/prompt/mountain%20landscape%20sunset%20photorealistic?width=800&height=800&seed=23456&nologo=true',
+  'https://image.pollinations.ai/prompt/beach%20crystal%20water%20palm%20trees?width=800&height=800&seed=34567&nologo=true',
+  'https://image.pollinations.ai/prompt/forest%20sunlight%20trees%20nature?width=800&height=800&seed=45678&nologo=true',
+  'https://image.pollinations.ai/prompt/waterfall%20tropical%20rainforest?width=800&height=800&seed=56789&nologo=true',
+  'https://image.pollinations.ai/prompt/lion%20portrait%20wildlife%20photography?width=800&height=800&seed=67890&nologo=true',
+  'https://image.pollinations.ai/prompt/golden%20retriever%20puppy%20grass?width=800&height=800&seed=78901&nologo=true',
+  'https://image.pollinations.ai/prompt/city%20skyline%20night%20buildings?width=800&height=800&seed=89012&nologo=true',
+  'https://image.pollinations.ai/prompt/european%20street%20architecture?width=800&height=800&seed=90123&nologo=true',
+  'https://image.pollinations.ai/prompt/coffee%20shop%20interior%20cozy?width=800&height=800&seed=11234&nologo=true',
+  'https://image.pollinations.ai/prompt/gourmet%20burger%20food%20photography?width=800&height=800&seed=22345&nologo=true',
+  'https://image.pollinations.ai/prompt/colorful%20parrot%20branch%20wildlife?width=800&height=800&seed=33456&nologo=true',
+  'https://image.pollinations.ai/prompt/butterfly%20flower%20macro%20photography?width=800&height=800&seed=44567&nologo=true',
+  'https://image.pollinations.ai/prompt/elephant%20family%20savanna%20sunset?width=800&height=800&seed=55678&nologo=true',
+  'https://image.pollinations.ai/prompt/glass%20building%20futuristic%20architecture?width=800&height=800&seed=66789&nologo=true'
 ];
 
 function generateImagePair() {
-  const prompt = aiPrompts[Math.floor(Math.random() * aiPrompts.length)];
+  const aiImage = aiImagePool[Math.floor(Math.random() * aiImagePool.length)];
   const realImage = realImagePool[Math.floor(Math.random() * realImagePool.length)];
-  const encodedPrompt = encodeURIComponent(prompt);
-  const aiImage = `https://image.pollinations.ai/prompt/${encodedPrompt}?width=800&height=800&seed=${Math.floor(Math.random() * 1000000)}&nologo=true`;
 
   const images = Math.random() > 0.5
     ? { left: aiImage, right: realImage, aiPosition: 'left' }
@@ -62,7 +58,7 @@ function generateImagePair() {
     leftImage: images.left,
     rightImage: images.right,
     aiPosition: images.aiPosition,
-    prompt: prompt
+    prompt: 'AI generated image'
   };
 }
 
