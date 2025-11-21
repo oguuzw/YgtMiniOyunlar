@@ -1,4 +1,4 @@
-// AI vs Gerçek oyun mantığı - backend proxy ile gerçek zamanlı üretim
+// AI vs Gerçek oyun mantığı - Takım modu
 const nextBtn = document.getElementById('next-round');
 const statusEl = document.getElementById('status');
 const leftImg = document.getElementById('left-img');
@@ -6,16 +6,26 @@ const rightImg = document.getElementById('right-img');
 const leftChoose = document.getElementById('left-choose');
 const rightChoose = document.getElementById('right-choose');
 const resultMsg = document.getElementById('result-message');
+const scoreAEl = document.getElementById('score-a');
+const scoreBEl = document.getElementById('score-b');
+const turnIndicator = document.getElementById('turn-indicator');
+const currentTurnEl = document.getElementById('current-turn');
 
 // Production'da Vercel URL, development'ta localhost
 const API_URL = window.location.hostname === 'localhost' 
   ? 'http://localhost:3000/api/generate-pair'
   : '/api/generate-pair';
 
+// Takım sistemi
+let scoreA = 0;
+let scoreB = 0;
+let currentTeam = 'A'; // 'A' veya 'B'
+const WIN_SCORE = 5;
+
 let aiPosition = 'left';
 let canChoose = false;
 let nextImagePair = null;
-let secondImagePair = null; // 2. sıradaki çift
+let secondImagePair = null;
 let isPreloading = false;
 
 function setStatus(s){ statusEl.textContent = s; }
@@ -143,6 +153,56 @@ async function loadRound(){
   }
 }
 
+function updateScoreboard() {
+  scoreAEl.textContent = scoreA;
+  scoreBEl.textContent = scoreB;
+  
+  // Aktif takımı vurgula
+  const teamACard = document.querySelector('.team-a');
+  const teamBCard = document.querySelector('.team-b');
+  
+  if (currentTeam === 'A') {
+    teamACard.classList.add('active');
+    teamBCard.classList.remove('active');
+    currentTurnEl.textContent = '🔵 A Takımı';
+  } else {
+    teamBCard.classList.add('active');
+    teamACard.classList.remove('active');
+    currentTurnEl.textContent = '🔴 B Takımı';
+  }
+}
+
+function checkWinner() {
+  if (scoreA >= WIN_SCORE) {
+    return 'A';
+  } else if (scoreB >= WIN_SCORE) {
+    return 'B';
+  }
+  return null;
+}
+
+function showGameOver(winner) {
+  const overlay = document.getElementById('result-overlay');
+  const icon = document.getElementById('result-icon');
+  const message = document.getElementById('result-message');
+  const detail = document.getElementById('result-detail');
+  
+  overlay.classList.add('show', 'success');
+  icon.textContent = '🏆';
+  message.textContent = `${winner === 'A' ? '🔵 A' : '🔴 B'} Takımı Kazandı!`;
+  detail.textContent = `Tebrikler! ${scoreA}-${scoreB}`;
+  
+  // Oyunu sıfırla
+  setTimeout(() => {
+    scoreA = 0;
+    scoreB = 0;
+    currentTeam = 'A';
+    updateScoreboard();
+    overlay.classList.remove('show');
+    loadRound();
+  }, 5000);
+}
+
 function choose(side){
   if(!canChoose) return;
   canChoose = false;
@@ -158,15 +218,35 @@ function choose(side){
   overlay.classList.add('show');
   
   if(selectedIsAI){
+    // Doğru cevap - puan ekle
+    if (currentTeam === 'A') {
+      scoreA++;
+    } else {
+      scoreB++;
+    }
+    
     overlay.classList.add('success');
     overlay.classList.remove('failure');
     icon.textContent = '🎉';
-    message.textContent = 'Tebrikler!';
+    message.textContent = `${currentTeam === 'A' ? '🔵 A' : '🔴 B'} Takımı +1 Puan!`;
     detail.textContent = 'Doğru bildiniz! 🎯';
     message.style.background = 'linear-gradient(135deg, #00f2fe, #4facfe)';
     message.style.webkitBackgroundClip = 'text';
     message.style.webkitTextFillColor = 'transparent';
+    
+    updateScoreboard();
+    
+    // Kazanan kontrolü
+    const winner = checkWinner();
+    if (winner) {
+      setTimeout(() => {
+        overlay.classList.remove('show');
+        showGameOver(winner);
+      }, 2000);
+      return;
+    }
   } else {
+    // Yanlış cevap
     overlay.classList.add('failure');
     overlay.classList.remove('success');
     icon.textContent = '😔';
@@ -177,15 +257,21 @@ function choose(side){
     message.style.webkitTextFillColor = 'transparent';
   }
   
-  setStatus('Yeni tur için "Yeni Tur" butonuna basın.');
+  // Sırayı değiştir
+  currentTeam = currentTeam === 'A' ? 'B' : 'A';
+  updateScoreboard();
   
-  // 3 saniye sonra otomatik kapat
+  // 2 saniye sonra kapat ve yeni tur
   setTimeout(() => {
     overlay.classList.remove('show');
-  }, 3000);
+    loadRound();
+  }, 2000);
   
   // Overlay'e tıklayınca kapat
-  overlay.onclick = () => overlay.classList.remove('show');
+  overlay.onclick = () => {
+    overlay.classList.remove('show');
+    loadRound();
+  };
 }
 
 nextBtn.addEventListener('click', (e)=>{ e.preventDefault(); loadRound(); });
@@ -194,6 +280,7 @@ rightChoose.addEventListener('click', ()=> choose('right'));
 
 // Sayfa yüklenince otomatik başlat
 window.addEventListener('DOMContentLoaded', ()=> {
+  updateScoreboard();
   loadRound();
   // İlk yüklemede 2 tur önceden yükle
   setTimeout(() => preloadNextPair(), 1000);
