@@ -15,37 +15,28 @@ let imageCache = [];
 const CACHE_SIZE = 5; // Önceden 5 görsel hazırla
 
 // Gerçek görsel havuzu - Unsplash çeşitli kategoriler
+// Gerçek fotoğraf havuzu - Picsum Photos (sabit ID'ler, hızlı yükleme)
 const realImagePool = [
-  // İnsanlar
-  'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800&h=800&fit=crop',
-  'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=800&h=800&fit=crop',
-  'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=800&fit=crop',
-  
-  // Doğa & Manzara
-  'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=800&fit=crop',
-  'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800&h=800&fit=crop',
-  'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&h=800&fit=crop',
-  'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=800&h=800&fit=crop',
-  
-  // Hayvanlar
-  'https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=800&h=800&fit=crop',
-  'https://images.unsplash.com/photo-1425082661705-1834bfd09dca?w=800&h=800&fit=crop',
-  'https://images.unsplash.com/photo-1537151608828-ea2b11777ee8?w=800&h=800&fit=crop',
-  'https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=800&h=800&fit=crop',
-  
-  // Şehir & Mimari
-  'https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=800&h=800&fit=crop',
-  'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800&h=800&fit=crop',
-  'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=800&h=800&fit=crop',
-  
-  // Yiyecek
-  'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800&h=800&fit=crop',
-  'https://images.unsplash.com/photo-1511688878353-3a2f5be94cd7?w=800&h=800&fit=crop',
-  
-  // Nesneler & Diğer
-  'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=800&h=800&fit=crop',
-  'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800&h=800&fit=crop',
-  'https://images.unsplash.com/photo-1490730141103-6cac27aaab94?w=800&h=800&fit=crop'
+  'https://picsum.photos/id/10/800/800',   // Manzara
+  'https://picsum.photos/id/15/800/800',   // Doğa
+  'https://picsum.photos/id/20/800/800',   // Şehir
+  'https://picsum.photos/id/24/800/800',   // Dağ
+  'https://picsum.photos/id/28/800/800',   // Orman
+  'https://picsum.photos/id/33/800/800',   // Sahil
+  'https://picsum.photos/id/40/800/800',   // Mimari
+  'https://picsum.photos/id/48/800/800',   // Doğa
+  'https://picsum.photos/id/56/800/800',   // Bina
+  'https://picsum.photos/id/64/800/800',   // Hayvan
+  'https://picsum.photos/id/72/800/800',   // Sokak
+  'https://picsum.photos/id/82/800/800',   // Bitki
+  'https://picsum.photos/id/96/800/800',   // Deniz
+  'https://picsum.photos/id/103/800/800',  // Gökyüzü
+  'https://picsum.photos/id/111/800/800',  // Şehir
+  'https://picsum.photos/id/119/800/800',  // Doğa
+  'https://picsum.photos/id/129/800/800',  // Manzara
+  'https://picsum.photos/id/137/800/800',  // Yapı
+  'https://picsum.photos/id/145/800/800',  // Kırsal
+  'https://picsum.photos/id/152/800/800'   // Detay
 ];
 
 // Sabit seed'li AI görseller (cache'den hızlı gelir, her zaman aynı görsel)
