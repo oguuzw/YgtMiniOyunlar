@@ -55,6 +55,95 @@ Flowchart sembollerini ve isimlerini eşleştirmeniz gereken eğitim oyunu.
 
 ---
 
+### 4. **AI vs Gerçek** 🖼️🎆
+Kullanıcıya otomatik olarak iki görsel gösterilir: biri gerçek fotoğraf, diğeri **gerçek zamanlı olarak AI tarafından üretilen** görsel (Pollinations.ai). Kullanıcının amacı hangi görselin AI olduğunu tahmin etmektir.
+
+**Nasıl Oynanır:**
+- Sayfa açılır açılmaz backend sunucusu Pollinations.ai ile yeni bir AI görseli üretir (2-3 saniye)
+- Rastgele bir gerçek fotoğraf ile birlikte iki görsel sol/sağ yerleştirilir
+- Hangi görselin AI tarafından üretildiğini tahmin ederek seçim yapın
+- Doğru/yanlış sonucu görün ve "Yeni Tur" ile yeni AI görseli üretin
+
+**✨ Tamamen Ücretsiz:** API key gerekmez, sınırsız kullanım!
+
+**Backend Kurulum:**
+```bash
+# 1. Backend klasörüne gidin
+cd server
+
+# 2. Bağımlılıkları yükleyin
+npm install
+
+# 3. Sunucuyu başlatın (API key gerekmez!)
+npm start
+```
+
+**Oyunu Çalıştırma (Yerel):**
+
+**Kolay Yol:**
+```bash
+# Proje kökünde
+start.bat
+```
+
+**Manuel Yol:**
+```bash
+# Terminal 1: Backend sunucusu
+cd server
+npm start
+
+# Terminal 2: Frontend sunucusu
+cd ..
+python -m http.server 8000
+# Tarayıcıda: http://localhost:8000/docs/ai-vs-real.html
+```
+
+---
+
+## 🌐 Deployment (Canlı Yayın)
+
+### Vercel ile Deploy (ÖNERİLEN - Ücretsiz)
+
+**1. Vercel Hesabı Oluşturun:**
+- https://vercel.com adresine gidin
+- GitHub hesabınızla giriş yapın
+
+**2. Projeyi Deploy Edin:**
+```bash
+# Vercel CLI'yi yükleyin (bir kere)
+npm install -g vercel
+
+# Proje kökünde
+vercel
+
+# Sorulara cevaplar:
+# Set up and deploy? → Y
+# Which scope? → Seçin
+# Link to existing project? → N
+# Project name? → ygt-mini-games
+# Directory? → ./
+# Override settings? → N
+```
+
+**3. Deploy Edildikten Sonra:**
+- URL'nizi alacaksınız: `https://ygt-mini-games.vercel.app`
+- Site otomatik güncellenecek (her git push'ta)
+
+### Netlify ile Deploy (Alternatif)
+
+1. https://netlify.com → New site from Git
+2. GitHub repo'nuzu bağlayın
+3. Build settings:
+   - Build command: `cd server && npm install`
+   - Publish directory: `docs`
+4. Netlify Functions için `netlify.toml` ekleyin
+
+### GitHub Pages + Heroku (Backend Ayrı)
+
+**Frontend:** GitHub Pages'de yayınlanır (ücretsiz)
+**Backend:** Heroku/Railway'de yayınlanır (ücretsiz tier)
+
+
 ## 🚀 Kurulum ve Kullanım
 
 ### Gereklilikler

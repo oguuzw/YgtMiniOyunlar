@@ -1,0 +1,20 @@
+{
+  "name": "ygt-ai-vs-real-server",
+  "version": "1.0.0",
+  "description": "Backend proxy for AI vs Real game - generates AI images and serves real images",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "vercel-build": "echo Build complete"
+  },
+  "keywords": ["ai", "game", "proxy", "openai"],
+  "author": "YGT",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1"
+  }
+}

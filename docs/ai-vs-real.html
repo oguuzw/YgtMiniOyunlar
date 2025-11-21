@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI vs Gerçek - Mini Oyun</title>
+  <link rel="icon" type="image/svg+xml" href="favicon/favicon.svg">
+  <link rel="manifest" href="favicon/site.webmanifest">
+  <link rel="stylesheet" href="styles/main.css">
+  <link rel="stylesheet" href="styles/ai-vs-real.css">
+</head>
+<body>
+  <div class="container ai-vs-real-container">
+    <header>
+      <div class="header-content">
+        <h1>🤖 AI vs Gerçek 📸</h1>
+        <p class="subtitle">Hangisi yapay zeka tarafından üretildi?</p>
+      </div>
+      <a href="index.html" class="back-link">← Ana Sayfa</a>
+    </header>
+
+    <section class="game-info">
+      <div class="instruction-card">
+        <p class="instruction">İki görsel gösterilecek. Hangisinin <strong>AI tarafından üretildiğini</strong> tahmin edin!</p>
+      </div>
+      <div id="status" class="status">🎨 Görseller hazırlanıyor...</div>
+      <button id="next-round" class="next-btn">🔄 Yeni Tur</button>
+    </section>
+
+    <section class="images-section">
+      <div class="image-card">
+        <div class="image-wrapper">
+          <img id="left-img" alt="Sol Görsel">
+          <div class="image-overlay">Görsel A</div>
+        </div>
+        <button id="left-choose" class="choose-btn">🤖 Bu AI</button>
+      </div>
+      <div class="image-card">
+        <div class="image-wrapper">
+          <img id="right-img" alt="Sağ Görsel">
+          <div class="image-overlay">Görsel B</div>
+        </div>
+        <button id="right-choose" class="choose-btn">🤖 Bu AI</button>
+      </div>
+    </section>
+
+    <!-- Result Overlay -->
+    <div id="result-overlay" class="result-overlay">
+      <div class="result-modal">
+        <div id="result-icon" class="result-icon"></div>
+        <div id="result-message" class="result-message"></div>
+        <div id="result-detail" class="result-detail"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="scripts/ai-vs-real.js"></script>
+</body>
+</html>
