@@ -23,6 +23,7 @@
   <title>AI vs Gerçek - Mini Oyun</title>
   <link rel="icon" type="image/svg+xml" href="favicon/favicon.svg">
   <link rel="manifest" href="favicon/site.webmanifest">
+  <link rel="stylesheet" href="styles/page-loader.css">
   <link rel="stylesheet" href="styles/main.css">
   <link rel="stylesheet" href="styles/ai-vs-real.css">
   
@@ -36,13 +37,18 @@
   </script>
 </head>
 <body>
+  <!-- Page Loader -->
+  <div id="page-loader" class="page-loader">
+      <img src="assets/loading_animation.gif" alt="Yüklenyor" class="page-loading-gif">
+  </div>
+  
   <div class="container ai-vs-real-container">
     <header>
       <div class="header-content">
         <h1>🤖 AI vs Gerçek 📸</h1>
         <p class="subtitle">Hangisi yapay zeka tarafından üretildi?</p>
       </div>
-      <a href="index.html" class="back-link">← Ana Sayfa</a>
+      <a href="#" id="back-to-home" class="back-link">← Ana Sayfa</a>
     </header>
 
     <section class="game-info">
@@ -80,8 +86,8 @@
     <section class="images-section">
       <div class="image-card clickable" id="left-card">
         <div class="image-wrapper">
-          <div class="image-skeleton" id="left-skeleton">
-            <div class="skeleton-shimmer"></div>
+          <div class="image-loader" id="left-loader">
+            <img src="assets/loading_animation.gif" alt="Yüklenyor" class="loading-gif">
           </div>
           <img id="left-img" alt="Sol Görsel">
         </div>
@@ -105,8 +111,8 @@
       
       <div class="image-card clickable" id="right-card">
         <div class="image-wrapper">
-          <div class="image-skeleton" id="right-skeleton">
-            <div class="skeleton-shimmer"></div>
+          <div class="image-loader" id="right-loader">
+            <img src="assets/loading_animation.gif" alt="Yüklenyor" class="loading-gif">
           </div>
           <img id="right-img" alt="Sağ Görsel">
         </div>
@@ -123,6 +129,7 @@
     </div>
   </div>
 
+  <script src="scripts/page-loader.js"></script>
   <script src="scripts/ai-vs-real.js"></script>
 </body>
 </html>

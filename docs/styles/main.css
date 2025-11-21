@@ -87,6 +87,21 @@ body {
     object-fit: cover;
     background: #fff;
     box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+.community-logo-large:hover {
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 
+        0 8px 30px rgba(79, 172, 254, 0.5),
+        0 0 40px rgba(255, 255, 255, 0.3);
+    animation: none;
 }
 
 .navbar-games {
@@ -102,11 +117,32 @@ body {
     background: rgba(255,255,255,0.08);
     border-radius: 8px;
     padding: 6px 12px;
-    transition: background 0.2s;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgba(255,255,255,0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.navbar-game::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: -100%;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(79, 172, 254, 0.8), transparent);
+    transition: left 0.5s;
 }
 
 .navbar-game:hover {
     background: rgba(255,255,255,0.18);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(79, 172, 254, 0.3);
+    border-color: rgba(79, 172, 254, 0.4);
+}
+
+.navbar-game:hover::after {
+    left: 100%;
 }
 
 .navbar-game-logo {
@@ -155,13 +191,44 @@ main {
     display: flex;
     flex-direction: column;
     align-items: center;
-    transition: transform 0.2s;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     min-width: 140px;
+    position: relative;
+    overflow: hidden;
+    border: 2px solid rgba(255,255,255,0.1);
+}
+
+.game-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(79, 172, 254, 0.3) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.6s, transform 0.6s;
+    pointer-events: none;
+}
+
+.game-card:hover::before {
+    opacity: 1;
+    transform: translate(25%, 25%);
 }
 
 .game-card:hover {
-    transform: scale(1.07);
+    transform: translateY(-12px) scale(1.05);
     background: rgba(255,255,255,0.28);
+    box-shadow: 
+        0 15px 40px rgba(79, 172, 254, 0.4),
+        0 8px 20px rgba(0, 0, 0, 0.3),
+        inset 0 1px 1px rgba(255, 255, 255, 0.3);
+    border-color: rgba(79, 172, 254, 0.6);
+}
+
+.game-card:active {
+    transform: translateY(-8px) scale(1.02);
+    transition: all 0.1s;
 }
 
 .game-logo {
@@ -171,6 +238,15 @@ main {
     margin-bottom: 12px;
     border-radius: 12px;
     background: #fff;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.game-card:hover .game-logo {
+    transform: rotateY(15deg) scale(1.1);
+    box-shadow: 
+        0 12px 30px rgba(79, 172, 254, 0.5),
+        0 0 20px rgba(255, 255, 255, 0.3);
 }
 
 .game-title {
@@ -178,6 +254,16 @@ main {
     font-size: 1.2rem;
     font-weight: 500;
     text-shadow: 0 1px 4px rgba(0,0,0,0.2);
+    transition: all 0.3s;
+    position: relative;
+}
+
+.game-card:hover .game-title {
+    transform: translateY(-3px);
+    text-shadow: 
+        0 4px 8px rgba(0, 0, 0, 0.4),
+        0 0 20px rgba(79, 172, 254, 0.6);
+    font-weight: 600;
 }
 
 .background {

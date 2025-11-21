@@ -85,11 +85,11 @@ async function loadRound(){
   rightCard.style.pointerEvents = 'none';
   nextBtn.disabled = true;
   
-  // Skeleton loaderları göster
-  const leftSkeleton = document.getElementById('left-skeleton');
-  const rightSkeleton = document.getElementById('right-skeleton');
-  leftSkeleton.classList.add('loading');
-  rightSkeleton.classList.add('loading');
+  // Loading animasyonlarını göster
+  const leftLoader = document.getElementById('left-loader');
+  const rightLoader = document.getElementById('right-loader');
+  leftLoader.classList.add('loading');
+  rightLoader.classList.add('loading');
 
   try {
     let data;
@@ -136,9 +136,9 @@ async function loadRound(){
       new Promise(r => { leftImg.onload = r; leftImg.onerror = r; }),
       new Promise(r => { rightImg.onload = r; rightImg.onerror = r; })
     ]).then(() => {
-      // Skeleton loaderları gizle
-      leftSkeleton.classList.remove('loading');
-      rightSkeleton.classList.remove('loading');
+      // Loading animasyonlarını gizle
+      leftLoader.classList.remove('loading');
+      rightLoader.classList.remove('loading');
       
       // Aynı anda göster
       leftImg.style.transition = 'opacity 0.3s ease-in';
@@ -160,9 +160,9 @@ async function loadRound(){
     console.error('❌ Hata:', error);
     setStatus('❌ Hata: ' + error.message + ' (Backend sunucusu çalışıyor mu?)');
     nextBtn.disabled = false;
-    // Hata durumunda skeleton'ları gizle
-    leftSkeleton.classList.remove('loading');
-    rightSkeleton.classList.remove('loading');
+    // Hata durumunda loading animasyonlarını gizle
+    leftLoader.classList.remove('loading');
+    rightLoader.classList.remove('loading');
   }
 }
 
@@ -298,6 +298,44 @@ const startGameBtn = document.getElementById('start-game-btn');
 startGameBtn.addEventListener('click', () => {
   tutorialOverlay.classList.remove('show');
   localStorage.setItem('ai-vs-real-tutorial-seen', 'true');
+});
+
+// Ana sayfaya dönüş animasyonu (herhangi bir çıkış tuşunda)
+function showLoadingAndNavigate(url) {
+  const pageLoader = document.getElementById('page-loader');
+  if (pageLoader) {
+    pageLoader.classList.remove('hidden');
+    pageLoader.style.display = 'flex';
+    setTimeout(() => {
+      window.location.href = url;
+    }, 500);
+  } else {
+    window.location.href = url;
+  }
+}
+
+const backToHomeBtn = document.getElementById('back-to-home');
+if (backToHomeBtn) {
+  backToHomeBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    showLoadingAndNavigate('index.html');
+  });
+}
+
+// Tüm linkleri yakala ve loading animasyonu göster
+document.addEventListener('click', (e) => {
+  const link = e.target.closest('a');
+  if (link && link.href && !link.hasAttribute('data-no-loading')) {
+    // Aynı sayfaya giden linkler hariç
+    const currentPage = window.location.pathname.split('/').pop();
+    const targetPage = link.getAttribute('href');
+    
+    // Dış link veya anchor değilse
+    if (targetPage && !targetPage.startsWith('#') && !targetPage.startsWith('http') && targetPage !== currentPage) {
+      e.preventDefault();
+      showLoadingAndNavigate(targetPage);
+    }
+  }
 });
 
 // Sayfa yüklenince otomatik başlat
