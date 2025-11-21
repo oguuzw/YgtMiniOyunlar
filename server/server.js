@@ -12,7 +12,7 @@ app.use(express.json());
 
 // Görsel cache sistemi
 let imageCache = [];
-const CACHE_SIZE = 3; // Önceden 3 görsel hazırla
+const CACHE_SIZE = 5; // Önceden 5 görsel hazırla
 
 // Gerçek görsel havuzu - Unsplash çeşitli kategoriler
 const realImagePool = [

@@ -14,28 +14,55 @@ const API_URL = window.location.hostname === 'localhost'
 
 let aiPosition = 'left';
 let canChoose = false;
-let nextImagePair = null; // Sonraki görsel çifti cache
+let nextImagePair = null;
+let secondImagePair = null; // 2. sıradaki çift
 let isPreloading = false;
 
 function setStatus(s){ statusEl.textContent = s; }
 
-// Arka planda sonraki görseli yükle
+// Görseli tarayıcı cache'ine yükle (görünmez img ile)
+function preloadImage(url) {
+  const img = new Image();
+  img.src = url;
+}
+
+// Arka planda sonraki görseli yükle (2 tur önceden)
 async function preloadNextPair() {
   if (isPreloading) return;
   isPreloading = true;
   
   try {
-    const response = await fetch(API_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' }
-    });
+    // İlk sıradaki çifti al
+    if (!nextImagePair) {
+      const response1 = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      if (response1.ok) {
+        nextImagePair = await response1.json();
+        // Görselleri tarayıcı cache'ine yükle
+        preloadImage(nextImagePair.leftImage);
+        preloadImage(nextImagePair.rightImage);
+        console.log('⚡ 1. görsel hazır');
+      }
+    }
     
-    if (response.ok) {
-      nextImagePair = await response.json();
-      console.log('⚡ Sonraki görsel hazır (cache)');
+    // İkinci sıradaki çifti al
+    if (!secondImagePair) {
+      const response2 = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      if (response2.ok) {
+        secondImagePair = await response2.json();
+        // Görselleri tarayıcı cache'ine yükle
+        preloadImage(secondImagePair.leftImage);
+        preloadImage(secondImagePair.rightImage);
+        console.log('⚡ 2. görsel hazır');
+      }
     }
   } catch (error) {
-    console.log('⚠️ Preload hatası (görmezden gelindi)');
+    console.log('⚠️ Preload hatası');
   } finally {
     isPreloading = false;
   }
@@ -55,11 +82,13 @@ async function loadRound(){
     if (nextImagePair) {
       console.log('⚡ Cache\'ten anında yüklendi!');
       data = nextImagePair;
-      nextImagePair = null;
+      // Sıradaki görselleri kaydır
+      nextImagePair = secondImagePair;
+      secondImagePair = null;
       setStatus('⚡ Görseller yükleniyor...');
     } else {
       // Cache boşsa API'den al
-      setStatus('🎨 AI görseli üretiliyor... (birkaç saniye)');
+      setStatus('🎨 Görseller yükleniyor...');
       const response = await fetch(API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' }
@@ -71,6 +100,9 @@ async function loadRound(){
       }
 
       data = await response.json();
+      // Görselleri hemen cache'e al
+      preloadImage(data.leftImage);
+      preloadImage(data.rightImage);
     }
     
     aiPosition = data.aiPosition;
@@ -163,6 +195,6 @@ rightChoose.addEventListener('click', ()=> choose('right'));
 // Sayfa yüklenince otomatik başlat
 window.addEventListener('DOMContentLoaded', ()=> {
   loadRound();
-  // İlk yüklemede de bir tane preload yap
-  setTimeout(() => preloadNextPair(), 3000);
+  // İlk yüklemede 2 tur önceden yükle
+  setTimeout(() => preloadNextPair(), 1000);
 });

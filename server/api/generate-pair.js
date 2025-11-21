@@ -1,7 +1,7 @@
 // Vercel serverless handler for /api/generate-pair
 // This file is intentionally a handler (no app.listen) so it works on serverless platforms.
 
-const CACHE_SIZE = 3;
+const CACHE_SIZE = 5; // Daha fazla önbellek
 let imageCache = [];
 
 const realImagePool = [
