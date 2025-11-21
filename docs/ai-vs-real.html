@@ -19,23 +19,7 @@
       <a href="index.html" class="back-link">← Ana Sayfa</a>
     </header>
 
-    <!-- Skor Tablosu -->
-    <section class="scoreboard">
-      <div class="team team-a">
-        <div class="team-name">🔵 A Takımı</div>
-        <div class="team-score" id="score-a">0</div>
-      </div>
-      <div class="vs-divider">VS</div>
-      <div class="team team-b">
-        <div class="team-name">🔴 B Takımı</div>
-        <div class="team-score" id="score-b">0</div>
-      </div>
-    </section>
-
     <section class="game-info">
-      <div class="turn-indicator" id="turn-indicator">
-        <span id="current-turn">🔵 A Takımı</span> sırası
-      </div>
       <div id="status" class="status">🎨 Görseller hazırlanıyor...</div>
       <button id="next-round" class="next-btn" style="display: none;">🔄 Yeni Tur</button>
     </section>
@@ -66,6 +50,22 @@
       </div>
     </div>
   </div>
+
+  <!-- Skor Tablosu - Alt Sabit -->
+  <section class="scoreboard">
+    <div class="turn-indicator" id="turn-indicator">
+      <span id="current-turn">🔵 A Takımı</span> sırası
+    </div>
+    <div class="team team-a">
+      <div class="team-name">🔵 A</div>
+      <div class="team-score" id="score-a">0</div>
+    </div>
+    <div class="vs-divider">VS</div>
+    <div class="team team-b">
+      <div class="team-name">🔴 B</div>
+      <div class="team-score" id="score-b">0</div>
+    </div>
+  </section>
 
   <script src="scripts/ai-vs-real.js"></script>
 </body>
