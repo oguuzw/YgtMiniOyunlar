@@ -146,6 +146,7 @@ async function loadRound(){
       leftImg.style.opacity = '1';
       rightImg.style.opacity = '1';
       
+      soundManager.play('newRound');
       setStatus('Hangi görsel AI tarafından üretildi?');
       canChoose = true;
       leftCard.style.pointerEvents = 'auto';
@@ -195,6 +196,7 @@ function checkWinner() {
 }
 
 function showGameOver(winner) {
+  soundManager.play('win');
   const overlay = document.getElementById('result-overlay');
   const icon = document.getElementById('result-icon');
   const message = document.getElementById('result-message');
@@ -232,6 +234,7 @@ function choose(side){
   
   if(selectedIsAI){
     // Doğru cevap - puan ekle
+    soundManager.play('correct');
     if (currentTeam === 'A') {
       scoreA++;
     } else {
@@ -260,6 +263,7 @@ function choose(side){
     }
   } else {
     // Yanlış cevap
+    soundManager.play('wrong');
     overlay.classList.add('failure');
     overlay.classList.remove('success');
     icon.textContent = '😔';
@@ -287,15 +291,16 @@ function choose(side){
   };
 }
 
-nextBtn.addEventListener('click', (e)=>{ e.preventDefault(); loadRound(); });
-leftCard.addEventListener('click', ()=> choose('left'));
-rightCard.addEventListener('click', ()=> choose('right'));
+nextBtn.addEventListener('click', (e)=>{ e.preventDefault(); soundManager.play('click'); loadRound(); });
+leftCard.addEventListener('click', ()=> { soundManager.play('click'); choose('left'); });
+rightCard.addEventListener('click', ()=> { soundManager.play('click'); choose('right'); });
 
 // Tutorial modal kontrolü
 const tutorialOverlay = document.getElementById('tutorial-overlay');
 const startGameBtn = document.getElementById('start-game-btn');
 
 startGameBtn.addEventListener('click', () => {
+  soundManager.play('click');
   tutorialOverlay.classList.remove('show');
   localStorage.setItem('ai-vs-real-tutorial-seen', 'true');
 });
