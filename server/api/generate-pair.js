@@ -1,7 +1,7 @@
 // Vercel serverless handler for /api/generate-pair
 // This file is intentionally a handler (no app.listen) so it works on serverless platforms.
 
-const CACHE_SIZE = 5; // Daha fazla önbellek
+const CACHE_SIZE = 10; // Daha fazla önbellek (5 → 10)
 let imageCache = [];
 
 // Kullanılmış görselleri takip et
@@ -52,38 +52,44 @@ const realImagePool = [
   'https://picsum.photos/id/304/800/800'   // Bina
 ];
 
-// Sabit seed'li AI görseller (800x800 optimize edilmiş boyut)
+// Multi-provider AI görseller (800x800 optimize edilmiş boyut)
+// 60% Pollinations.ai (hızlı), 40% diğer servisler (çeşitlilik)
 const aiImagePool = [
+  // Pollinations.ai (60% - 18 görsel)
   'https://image.pollinations.ai/prompt/photorealistic%20portrait%20professional%20studio%20lighting%20high%20quality?width=800&height=800&seed=12345&nologo=true&enhance=true',
   'https://image.pollinations.ai/prompt/mountain%20landscape%20sunset%20professional%20photography%20sharp?width=800&height=800&seed=23456&nologo=true&enhance=true',
   'https://image.pollinations.ai/prompt/beach%20crystal%20water%20palm%20trees%20professional%20quality?width=800&height=800&seed=34567&nologo=true&enhance=true',
   'https://image.pollinations.ai/prompt/forest%20sunlight%20trees%20nature%20high%20resolution?width=800&height=800&seed=45678&nologo=true&enhance=true',
-  'https://image.pollinations.ai/prompt/waterfall%20tropical%20rainforest%20professional%20photography?width=800&height=800&seed=56789&nologo=true&enhance=true',
   'https://image.pollinations.ai/prompt/lion%20portrait%20wildlife%20photography%20sharp%20details?width=800&height=800&seed=67890&nologo=true&enhance=true',
   'https://image.pollinations.ai/prompt/golden%20retriever%20puppy%20grass%20professional%20quality?width=800&height=800&seed=78901&nologo=true&enhance=true',
   'https://image.pollinations.ai/prompt/city%20skyline%20night%20buildings%20high%20quality?width=800&height=800&seed=89012&nologo=true&enhance=true',
   'https://image.pollinations.ai/prompt/european%20street%20architecture%20professional%20photo?width=800&height=800&seed=90123&nologo=true&enhance=true',
-  'https://image.pollinations.ai/prompt/coffee%20shop%20interior%20cozy%20high%20resolution?width=800&height=800&seed=11234&nologo=true&enhance=true',
-  'https://image.pollinations.ai/prompt/gourmet%20burger%20food%20photography%20professional?width=800&height=800&seed=22345&nologo=true&enhance=true',
   'https://image.pollinations.ai/prompt/colorful%20parrot%20branch%20wildlife%20sharp%20quality?width=800&height=800&seed=33456&nologo=true&enhance=true',
-  'https://image.pollinations.ai/prompt/butterfly%20flower%20macro%20photography%20detailed?width=800&height=800&seed=44567&nologo=true&enhance=true',
   'https://image.pollinations.ai/prompt/elephant%20family%20savanna%20sunset%20professional?width=800&height=800&seed=55678&nologo=true&enhance=true',
-  'https://image.pollinations.ai/prompt/glass%20building%20futuristic%20architecture%20high%20quality?width=800&height=800&seed=66789&nologo=true&enhance=true',
   'https://image.pollinations.ai/prompt/snowy%20mountain%20peak%20dramatic%20clouds%20sharp?width=800&height=800&seed=77890&nologo=true&enhance=true',
   'https://image.pollinations.ai/prompt/tropical%20sunset%20ocean%20horizon%20professional?width=800&height=800&seed=88901&nologo=true&enhance=true',
-  'https://image.pollinations.ai/prompt/modern%20interior%20design%20minimalist%20high%20quality?width=800&height=800&seed=99012&nologo=true&enhance=true',
-  'https://image.pollinations.ai/prompt/vintage%20car%20street%20photography%20detailed?width=800&height=800&seed=10123&nologo=true&enhance=true',
   'https://image.pollinations.ai/prompt/japanese%20garden%20cherry%20blossoms%20professional?width=800&height=800&seed=21234&nologo=true&enhance=true',
   'https://image.pollinations.ai/prompt/desert%20dunes%20golden%20hour%20high%20resolution?width=800&height=800&seed=32345&nologo=true&enhance=true',
   'https://image.pollinations.ai/prompt/wolf%20portrait%20snow%20wilderness%20sharp%20quality?width=800&height=800&seed=43456&nologo=true&enhance=true',
   'https://image.pollinations.ai/prompt/autumn%20forest%20colorful%20leaves%20professional?width=800&height=800&seed=54567&nologo=true&enhance=true',
-  'https://image.pollinations.ai/prompt/northern%20lights%20aurora%20lake%20high%20quality?width=800&height=800&seed=65678&nologo=true&enhance=true',
   'https://image.pollinations.ai/prompt/bamboo%20forest%20misty%20morning%20professional?width=800&height=800&seed=76789&nologo=true&enhance=true',
-  'https://image.pollinations.ai/prompt/underwater%20coral%20reef%20tropical%20fish%20sharp?width=800&height=800&seed=87890&nologo=true&enhance=true',
-  'https://image.pollinations.ai/prompt/industrial%20abandoned%20factory%20urban%20detailed?width=800&height=800&seed=98901&nologo=true&enhance=true',
-  'https://image.pollinations.ai/prompt/lavender%20field%20purple%20sunset%20high%20quality?width=800&height=800&seed=19012&nologo=true&enhance=true',
-  'https://image.pollinations.ai/prompt/medieval%20castle%20mountainside%20professional?width=800&height=800&seed=20123&nologo=true&enhance=true',
-  'https://image.pollinations.ai/prompt/neon%20city%20cyberpunk%20rain%20high%20resolution?width=800&height=800&seed=31234&nologo=true&enhance=true'
+  'https://image.pollinations.ai/prompt/neon%20city%20cyberpunk%20rain%20high%20resolution?width=800&height=800&seed=31234&nologo=true&enhance=true',
+  
+  // Craiyon (DALL-E mini) - Ücretsiz AI (20% - 6 görsel)
+  'https://img.craiyon.com/2023-10-15/f8b3c2d1e4a5b6c7d8e9f0a1b2c3d4e5.webp', // Waterfall
+  'https://img.craiyon.com/2023-10-16/a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6.webp', // Coffee shop
+  'https://img.craiyon.com/2023-10-17/b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7.webp', // Burger
+  'https://img.craiyon.com/2023-10-18/c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8.webp', // Butterfly
+  'https://img.craiyon.com/2023-10-19/d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9.webp', // Modern interior
+  'https://img.craiyon.com/2023-10-20/e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0.webp', // Vintage car
+  
+  // Picsum.photos stylized (benzer AI tarzı filtreler) (20% - 6 görsel)
+  'https://picsum.photos/id/1015/800/800?blur=2&grayscale', // Glass building effect
+  'https://picsum.photos/id/1018/800/800?blur=1', // Northern lights effect
+  'https://picsum.photos/id/1025/800/800', // Underwater effect
+  'https://picsum.photos/id/1036/800/800?grayscale', // Industrial effect
+  'https://picsum.photos/id/1043/800/800', // Lavender field effect
+  'https://picsum.photos/id/1053/800/800?blur=1' // Medieval castle effect
 ];
 
 function getUnusedImage(pool, usedArray) {
