@@ -130,11 +130,12 @@ async function loadRound(){
         throw new Error(errorMessage);
       }
 
-      let data;
       try {
         data = await response.json();
       } catch (jsonError) {
         throw new Error('Sunucu geçersiz yanıt döndürdü. Lütfen daha sonra tekrar deneyin.');
+      }
+      
       // Görselleri hemen cache'e al
       preloadImage(data.leftImage);
       preloadImage(data.rightImage);
@@ -331,52 +332,6 @@ nextBtn.addEventListener('click', (e)=>{ e.preventDefault(); soundManager.play('
 leftCard.addEventListener('click', ()=> { soundManager.play('click'); choose('left'); });
 rightCard.addEventListener('click', ()=> { soundManager.play('click'); choose('right'); });
 
-// Tutorial modal kontrolü
-const tutorialOverlay = document.getElementById('tutorial-overlay');
-const startGameBtn = document.getElementById('start-game-btn');
-
-if (startGameBtn && tutorialOverlay) {
-  startGameBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    
-    if (typeof soundManager !== 'undefined') {
-      soundManager.play('click');
-    }
-    
-    console.log('🚀 Oyuna Başla butonuna tıklandı');
-    
-    // Tutorial'ı hemen kapat
-    tutorialOverlay.classList.remove('show');
-    tutorialOverlay.style.opacity = '0';
-    tutorialOverlay.style.visibility = 'hidden';
-    
-    setTimeout(() => {
-      tutorialOverlay.style.display = 'none';
-    }, 400);
-    
-    localStorage.setItem('ai-vs-real-tutorial-seen', 'true');
-    
-    console.log('✅ Tutorial kapatıldı');
-    
-    // Loading animasyonlarını göster
-    const leftLoader = document.getElementById('left-loader');
-    const rightLoader = document.getElementById('right-loader');
-    if (leftLoader) leftLoader.classList.add('loading');
-    if (rightLoader) rightLoader.classList.add('loading');
-    
-    // Durum mesajını göster
-    setStatus('🎨 Görseller yükleniyor...');
-    
-    console.log('⏳ LoadRound başlatılıyor...');
-    
-    // Hemen yüklemeye başla (hata varsa kullanıcı görecek)
-    setTimeout(() => loadRound(), 100);
-  });
-} else {
-  console.error('❌ Tutorial elementi bulunamadı!', { startGameBtn, tutorialOverlay });
-}
-
 // Ana sayfaya dönüş animasyonu (herhangi bir çıkış tuşunda)
 function showLoadingAndNavigate(url) {
   const pageLoader = document.getElementById('page-loader');
@@ -418,6 +373,25 @@ document.addEventListener('click', (e) => {
 // Sayfa yüklenince otomatik başlat
 window.addEventListener('DOMContentLoaded', ()=> {
   updateScoreboard();
+  
+  // Tutorial modal kontrolü
+  const tutorialOverlay = document.getElementById('tutorial-overlay');
+  const startGameBtn = document.getElementById('start-game-btn');
+
+  if (startGameBtn) {
+    startGameBtn.addEventListener('click', () => {
+      console.log('🎮 Start game button clicked!');
+      if (typeof soundManager !== 'undefined') {
+        soundManager.play('click');
+      }
+      tutorialOverlay.classList.remove('show');
+      localStorage.setItem('ai-vs-real-tutorial-seen', 'true');
+      
+      // Oyunu başlat
+      loadRound();
+      setTimeout(() => preloadNextPair(), 1000);
+    });
+  }
   
   // Tutorial gösterilmişse direkt başlat
   const tutorialSeen = localStorage.getItem('ai-vs-real-tutorial-seen');
