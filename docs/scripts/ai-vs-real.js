@@ -335,33 +335,47 @@ rightCard.addEventListener('click', ()=> { soundManager.play('click'); choose('r
 const tutorialOverlay = document.getElementById('tutorial-overlay');
 const startGameBtn = document.getElementById('start-game-btn');
 
-startGameBtn.addEventListener('click', (e) => {
-  e.preventDefault();
-  soundManager.play('click');
-  
-  console.log('🚀 Oyuna Başla butonuna tıklandı');
-  
-  // Tutorial'ı hemen kapat
-  tutorialOverlay.classList.remove('show');
-  tutorialOverlay.style.display = 'none';
-  localStorage.setItem('ai-vs-real-tutorial-seen', 'true');
-  
-  console.log('✅ Tutorial kapatıldı');
-  
-  // Loading animasyonlarını göster
-  const leftLoader = document.getElementById('left-loader');
-  const rightLoader = document.getElementById('right-loader');
-  leftLoader.classList.add('loading');
-  rightLoader.classList.add('loading');
-  
-  // Durum mesajını göster
-  setStatus('🎨 Görseller yükleniyor...');
-  
-  console.log('⏳ LoadRound başlatılıyor...');
-  
-  // Hemen yüklemeye başla (hata varsa kullanıcı görecek)
-  setTimeout(() => loadRound(), 100);
-});
+if (startGameBtn && tutorialOverlay) {
+  startGameBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (typeof soundManager !== 'undefined') {
+      soundManager.play('click');
+    }
+    
+    console.log('🚀 Oyuna Başla butonuna tıklandı');
+    
+    // Tutorial'ı hemen kapat
+    tutorialOverlay.classList.remove('show');
+    tutorialOverlay.style.opacity = '0';
+    tutorialOverlay.style.visibility = 'hidden';
+    
+    setTimeout(() => {
+      tutorialOverlay.style.display = 'none';
+    }, 400);
+    
+    localStorage.setItem('ai-vs-real-tutorial-seen', 'true');
+    
+    console.log('✅ Tutorial kapatıldı');
+    
+    // Loading animasyonlarını göster
+    const leftLoader = document.getElementById('left-loader');
+    const rightLoader = document.getElementById('right-loader');
+    if (leftLoader) leftLoader.classList.add('loading');
+    if (rightLoader) rightLoader.classList.add('loading');
+    
+    // Durum mesajını göster
+    setStatus('🎨 Görseller yükleniyor...');
+    
+    console.log('⏳ LoadRound başlatılıyor...');
+    
+    // Hemen yüklemeye başla (hata varsa kullanıcı görecek)
+    setTimeout(() => loadRound(), 100);
+  });
+} else {
+  console.error('❌ Tutorial elementi bulunamadı!', { startGameBtn, tutorialOverlay });
+}
 
 // Ana sayfaya dönüş animasyonu (herhangi bir çıkış tuşunda)
 function showLoadingAndNavigate(url) {
