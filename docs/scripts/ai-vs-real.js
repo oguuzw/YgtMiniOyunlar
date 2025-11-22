@@ -49,11 +49,15 @@ async function preloadNextPair() {
         headers: { 'Content-Type': 'application/json' }
       });
       if (response1.ok) {
-        nextImagePair = await response1.json();
-        // Görselleri tarayıcı cache'ine yükle
-        preloadImage(nextImagePair.leftImage);
-        preloadImage(nextImagePair.rightImage);
-        console.log('⚡ 1. görsel hazır');
+        try {
+          nextImagePair = await response1.json();
+          // Görselleri tarayıcı cache'ine yükle
+          preloadImage(nextImagePair.leftImage);
+          preloadImage(nextImagePair.rightImage);
+          console.log('⚡ 1. görsel hazır');
+        } catch (e) {
+          console.log('⚠️ 1. görsel yüklenemedi:', e.message);
+        }
       }
     }
     
@@ -64,15 +68,19 @@ async function preloadNextPair() {
         headers: { 'Content-Type': 'application/json' }
       });
       if (response2.ok) {
-        secondImagePair = await response2.json();
-        // Görselleri tarayıcı cache'ine yükle
-        preloadImage(secondImagePair.leftImage);
-        preloadImage(secondImagePair.rightImage);
-        console.log('⚡ 2. görsel hazır');
+        try {
+          secondImagePair = await response2.json();
+          // Görselleri tarayıcı cache'ine yükle
+          preloadImage(secondImagePair.leftImage);
+          preloadImage(secondImagePair.rightImage);
+          console.log('⚡ 2. görsel hazır');
+        } catch (e) {
+          console.log('⚠️ 2. görsel yüklenemedi:', e.message);
+        }
       }
     }
   } catch (error) {
-    console.log('⚠️ Preload hatası');
+    console.log('⚠️ Preload ağ hatası:', error.message);
   } finally {
     isPreloading = false;
   }
@@ -84,6 +92,7 @@ async function loadRound(){
   leftCard.style.pointerEvents = 'none';
   rightCard.style.pointerEvents = 'none';
   nextBtn.disabled = true;
+  nextBtn.textContent = '🔄 Yeni Tur';
   
   // Loading animasyonlarını göster
   const leftLoader = document.getElementById('left-loader');
@@ -111,11 +120,21 @@ async function loadRound(){
       });
 
       if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || 'API isteği başarısız');
+        let errorMessage = 'Sunucu hatası';
+        try {
+          const error = await response.json();
+          errorMessage = error.error || `HTTP ${response.status}: ${response.statusText}`;
+        } catch {
+          errorMessage = `HTTP ${response.status}: ${response.statusText}`;
+        }
+        throw new Error(errorMessage);
       }
 
-      data = await response.json();
+      let data;
+      try {
+        data = await response.json();
+      } catch (jsonError) {
+        throw new Error('Sunucu geçersiz yanıt döndürdü. Lütfen daha sonra tekrar deneyin.');
       // Görselleri hemen cache'e al
       preloadImage(data.leftImage);
       preloadImage(data.rightImage);
@@ -159,8 +178,25 @@ async function loadRound(){
 
   } catch (error) {
     console.error('❌ Hata:', error);
-    setStatus('❌ Hata: ' + error.message + ' (Backend sunucusu çalışıyor mu?)');
+    
+    // Kullanıcı dostu hata mesajı
+    let userMessage = '';
+    if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+      userMessage = '🌐 İnternet bağlantınızı kontrol edin veya sayfa yüklenirken bekleyin.';
+    } else if (error.message.includes('Sunucu geçersiz yanıt')) {
+      userMessage = '⚠️ ' + error.message;
+    } else if (error.message.includes('HTTP 5')) {
+      userMessage = '🔧 Sunucu geçici olarak kullanılamıyor. Lütfen birkaç saniye sonra tekrar deneyin.';
+    } else if (error.message.includes('HTTP 4')) {
+      userMessage = '❌ İstek hatası: ' + error.message;
+    } else {
+      userMessage = '❌ Beklenmeyen bir hata oluştu: ' + error.message;
+    }
+    
+    setStatus(userMessage);
     nextBtn.disabled = false;
+    nextBtn.textContent = '🔄 Tekrar Dene';
+    
     // Hata durumunda loading animasyonlarını gizle
     leftLoader.classList.remove('loading');
     rightLoader.classList.remove('loading');
@@ -299,10 +335,32 @@ rightCard.addEventListener('click', ()=> { soundManager.play('click'); choose('r
 const tutorialOverlay = document.getElementById('tutorial-overlay');
 const startGameBtn = document.getElementById('start-game-btn');
 
-startGameBtn.addEventListener('click', () => {
+startGameBtn.addEventListener('click', (e) => {
+  e.preventDefault();
   soundManager.play('click');
+  
+  console.log('🚀 Oyuna Başla butonuna tıklandı');
+  
+  // Tutorial'ı hemen kapat
   tutorialOverlay.classList.remove('show');
+  tutorialOverlay.style.display = 'none';
   localStorage.setItem('ai-vs-real-tutorial-seen', 'true');
+  
+  console.log('✅ Tutorial kapatıldı');
+  
+  // Loading animasyonlarını göster
+  const leftLoader = document.getElementById('left-loader');
+  const rightLoader = document.getElementById('right-loader');
+  leftLoader.classList.add('loading');
+  rightLoader.classList.add('loading');
+  
+  // Durum mesajını göster
+  setStatus('🎨 Görseller yükleniyor...');
+  
+  console.log('⏳ LoadRound başlatılıyor...');
+  
+  // Hemen yüklemeye başla (hata varsa kullanıcı görecek)
+  setTimeout(() => loadRound(), 100);
 });
 
 // Ana sayfaya dönüş animasyonu (herhangi bir çıkış tuşunda)
@@ -313,7 +371,7 @@ function showLoadingAndNavigate(url) {
     pageLoader.style.display = 'flex';
     setTimeout(() => {
       window.location.href = url;
-    }, 500);
+    }, 4000);
   } else {
     window.location.href = url;
   }
@@ -351,9 +409,13 @@ window.addEventListener('DOMContentLoaded', ()=> {
   const tutorialSeen = localStorage.getItem('ai-vs-real-tutorial-seen');
   if (tutorialSeen) {
     tutorialOverlay.classList.remove('show');
+    // Tutorial görülmüşse hemen yükle
+    loadRound();
+    // İlk yüklemede 2 tur önceden yükle
+    setTimeout(() => preloadNextPair(), 1000);
+  } else {
+    // Tutorial açıkken arka planda preload başlat
+    setStatus('🎮 Hoş geldiniz! Oyuna başlamak için butona tıklayın.');
+    setTimeout(() => preloadNextPair(), 500);
   }
-  
-  loadRound();
-  // İlk yüklemede 2 tur önceden yükle
-  setTimeout(() => preloadNextPair(), 1000);
 });

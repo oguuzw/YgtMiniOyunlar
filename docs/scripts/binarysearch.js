@@ -88,8 +88,22 @@ playAgainBtn.onclick = () => {
   window.location.reload();
 };
 
+// Ana sayfaya dönüş animasyonu
+function showLoadingAndNavigate(url) {
+  const pageLoader = document.getElementById('page-loader');
+  if (pageLoader) {
+    pageLoader.classList.remove('hidden');
+    pageLoader.style.display = 'flex';
+    setTimeout(() => {
+      window.location.href = url;
+    }, 4000);
+  } else {
+    window.location.href = url;
+  }
+}
+
 goHomeBtn.onclick = () => {
-  window.location.href = "index.html";
+  showLoadingAndNavigate('index.html');
 };
 
 // Welcome modal elements
@@ -148,5 +162,5 @@ function animateBinaryBackground() {
 }
 
 document.getElementById('back-btn').onclick = () => {
-  window.location.href = "index.html";
+  showLoadingAndNavigate('index.html');
 };

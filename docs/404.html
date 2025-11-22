@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Sayfa bulunamadı - YGT Mini Oyunlar">
+  <title>404 - Sayfa Bulunamadı | YGT Mini Oyunlar</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="favicon/favicon.svg">
+  <link rel="icon" type="image/png" sizes="96x96" href="favicon/favicon-96x96.png">
+  <link rel="apple-touch-icon" href="favicon/apple-touch-icon.png">
+  <link rel="manifest" href="favicon/site.webmanifest">
+  <link rel="icon" type="image/x-icon" href="favicon/favicon.ico">
+  
+  <link rel="stylesheet" href="styles/main.css">
+  
+  <style>
+    .error-container {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .error-code {
+      font-size: clamp(80px, 15vw, 180px);
+      font-weight: bold;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin: 0;
+      line-height: 1;
+      animation: glitch 2s infinite;
+    }
+
+    @keyframes glitch {
+      0%, 100% { transform: translate(0); }
+      20% { transform: translate(-2px, 2px); }
+      40% { transform: translate(-2px, -2px); }
+      60% { transform: translate(2px, 2px); }
+      80% { transform: translate(2px, -2px); }
+    }
+
+    .error-message {
+      font-size: clamp(24px, 4vw, 36px);
+      color: #fff;
+      margin: 1.5rem 0;
+      font-weight: 600;
+    }
+
+    .error-description {
+      font-size: clamp(16px, 2vw, 20px);
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 3rem;
+      max-width: 600px;
+    }
+
+    .error-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .error-btn {
+      padding: 1rem 2rem;
+      font-size: 18px;
+      font-weight: 600;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .error-btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .error-btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+    }
+
+    .error-btn-secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .error-btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-3px);
+    }
+
+    .error-illustration {
+      margin-bottom: 2rem;
+      font-size: 120px;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+
+    .suggestions {
+      margin-top: 3rem;
+      padding: 2rem;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      max-width: 600px;
+      backdrop-filter: blur(10px);
+    }
+
+    .suggestions h3 {
+      color: #fff;
+      font-size: 20px;
+      margin-bottom: 1rem;
+    }
+
+    .suggestion-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .suggestion-list li {
+      margin: 0.75rem 0;
+    }
+
+    .suggestion-list a {
+      color: #667eea;
+      text-decoration: none;
+      font-size: 18px;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .suggestion-list a:hover {
+      color: #764ba2;
+      transform: translateX(5px);
+    }
+
+    @media (max-width: 768px) {
+      .error-actions {
+        flex-direction: column;
+        width: 100%;
+      }
+
+      .error-btn {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .suggestions {
+        padding: 1.5rem;
+      }
+    }
+  </style>
+  
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+  </script>
+</head>
+<body>
+  <div class="background"></div>
+  <div id="code-effects"></div>
+  
+  <div class="error-container">
+    <div class="error-illustration">🎮❌</div>
+    <h1 class="error-code">404</h1>
+    <h2 class="error-message">Sayfa Bulunamadı!</h2>
+    <p class="error-description">
+      Aradığınız sayfa taşınmış, silinmiş veya hiç var olmamış olabilir. 
+      Endişelenmeyin, oyunlarımıza geri dönebilirsiniz!
+    </p>
+    
+    <div class="error-actions">
+      <a href="/" class="error-btn error-btn-primary">
+        🏠 Ana Sayfaya Dön
+      </a>
+      <button onclick="history.back()" class="error-btn error-btn-secondary">
+        ← Geri Git
+      </button>
+    </div>
+
+    <div class="suggestions">
+      <h3>🎯 Popüler Oyunlarımız</h3>
+      <ul class="suggestion-list">
+        <li><a href="/ai-vs-real.html">🤖 AI vs Gerçek</a></li>
+        <li><a href="/tabu.html">🎭 Tabu</a></li>
+        <li><a href="/binarysearch.html">🔍 Binary Search</a></li>
+        <li><a href="/flowchart.html">📊 Flow Chart</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <script src="scripts/main.js"></script>
+</body>
+</html>

@@ -4,7 +4,8 @@ body {
   min-height: 100vh;
   font-family: 'Segoe UI', Arial, sans-serif;
   background: linear-gradient(135deg, #0f2027 0%, #2c7744 100%);
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .binary-bg {
@@ -389,5 +390,198 @@ header {
 @media (min-width: 601px) {
   .game-oval {
     margin-top: -260px;
+  }
+}
+
+/* Footer Styles - Minimalist Modern */
+.footer {
+  background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.3) 100%);
+  color: white;
+  padding: 3.5rem 2rem 2rem;
+  margin-top: 5rem;
+  position: relative;
+  border-top: none;
+}
+
+.footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  border-radius: 3px;
+  box-shadow: 0 0 20px rgba(102, 126, 234, 0.6);
+}
+
+.footer-content {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 2rem;
+}
+
+.footer-section h3 {
+  font-size: 0.75rem;
+  margin-bottom: 1rem;
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.footer-section p {
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.95rem;
+  max-width: 600px;
+}
+
+.footer-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.footer-links li {
+  margin: 0;
+}
+
+.footer-links a {
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.footer-links a:hover {
+  color: white;
+  background: rgba(102, 126, 234, 0.2);
+  transform: translateY(-2px);
+}
+
+.social-links {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  justify-content: center;
+}
+
+.social-links a {
+  width: 44px;
+  height: 44px;
+  background: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.social-links a:hover {
+  border-color: #667eea;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  transform: translateY(-5px) rotate(360deg);
+  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.5);
+}
+
+.social-links svg {
+  width: 20px;
+  height: 20px;
+}
+
+.footer-bottom {
+  text-align: center;
+  padding-top: 2.5rem;
+  margin-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.85rem;
+  width: 100%;
+}
+
+.footer-bottom p {
+  margin: 0.3rem 0;
+  line-height: 1.5;
+}
+
+.footer-made-with {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
+}
+
+.footer-made-with a {
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  padding: 0 0.3rem;
+}
+
+.footer-made-with a:hover {
+  color: #764ba2;
+  text-decoration: underline;
+  text-decoration-color: rgba(118, 75, 162, 0.5);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+
+@media (max-width: 768px) {
+  .footer {
+    padding: 3rem 1.5rem 1.5rem;
+    margin-top: 4rem;
+  }
+  
+  .footer-content {
+    gap: 2rem;
+  }
+  
+  .footer-section h3 {
+    font-size: 0.7rem;
+    margin-bottom: 0.8rem;
+  }
+  
+  .footer-section p {
+    font-size: 0.875rem;
+  }
+  
+  .footer-links {
+    gap: 0.8rem;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .footer-links a {
+    justify-content: center;
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
+  }
+  
+  .social-links {
+    gap: 0.8rem;
+  }
+  
+  .social-links a {
+    width: 40px;
+    height: 40px;
   }
 }

@@ -116,9 +116,23 @@ function updateScore() {
   scoreSpan.textContent = score;
 }
 
+// Ana sayfaya dönüş animasyonu
+function showLoadingAndNavigate(url) {
+  const pageLoader = document.getElementById('page-loader');
+  if (pageLoader) {
+    pageLoader.classList.remove('hidden');
+    pageLoader.style.display = 'flex';
+    setTimeout(() => {
+      window.location.href = url;
+    }, 4000);
+  } else {
+    window.location.href = url;
+  }
+}
+
 // Geri butonu
 backBtn.addEventListener('click', () => {
-  window.location.href = "index.html";
+  showLoadingAndNavigate("index.html");
 });
 
 // Modal ekranı ekle
@@ -142,7 +156,7 @@ function createModal() {
 
   // Butonlara event ekle
   document.getElementById('home-btn').onclick = () => {
-    window.location.href = "index.html";
+    showLoadingAndNavigate("index.html");
   };
   document.getElementById('retry-btn').onclick = () => {
     modal.style.display = 'none';

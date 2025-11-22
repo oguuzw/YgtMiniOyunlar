@@ -2,12 +2,8 @@
 window.addEventListener('load', function() {
   const pageLoader = document.getElementById('page-loader');
   if (pageLoader) {
-    setTimeout(() => {
-      pageLoader.classList.add('hidden');
-      // Remove from DOM after animation
-      setTimeout(() => {
-        pageLoader.remove();
-      }, 500);
-    }, 300);
+    // Sayfa yüklenince hemen gizle (index.html'de sadece link tıklamalarında gösterilecek)
+    pageLoader.classList.add('hidden');
+    pageLoader.style.display = 'none';
   }
 });

@@ -194,8 +194,22 @@ const tabooCountDisplay = document.getElementById('taboo-count');
 // Oyunu başlat
 startGameBtn.onclick = startGame;
 playAgainBtn.onclick = () => window.location.reload();
-goHomeBtn.onclick = () => window.location.href = 'index.html';
-document.getElementById('back-btn').onclick = () => window.location.href = 'index.html';
+// Ana sayfaya dönüş animasyonu
+function showLoadingAndNavigate(url) {
+  const pageLoader = document.getElementById('page-loader');
+  if (pageLoader) {
+    pageLoader.classList.remove('hidden');
+    pageLoader.style.display = 'flex';
+    setTimeout(() => {
+      window.location.href = url;
+    }, 4000);
+  } else {
+    window.location.href = url;
+  }
+}
+
+goHomeBtn.onclick = () => showLoadingAndNavigate('index.html');
+document.getElementById('back-btn').onclick = () => showLoadingAndNavigate('index.html');
 
 // Buton işlevleri
 document.getElementById('correct-btn').onclick = () => handleAnswer('correct');
